@@ -34,7 +34,7 @@ export const siteSettings = {
   authorizedLinksMobile: [
     { href: Routes.profile, label: 'auth-menu-profile' },
     { href: Routes.orders, label: 'auth-menu-my-orders' },
-    { href: Routes.cards, label: 'profile-sidebar-my-cards' },
+    // { href: Routes.cards, label: 'profile-sidebar-my-cards' },
     { href: Routes.wishlists, label: 'profile-sidebar-my-wishlist' },
     { href: Routes.refunds, label: 'text-my-refunds' },
     { href: Routes.checkout, label: 'auth-menu-checkout' },
@@ -73,12 +73,12 @@ export const siteSettings = {
       href: Routes.reports,
       label: 'profile-sidebar-my-reports',
     },
-    {
-      href: Routes.cards,
-      label: 'profile-sidebar-my-cards',
-      // MultiPayment: Make it dynamic or from mapper
-      cardsPayment: [PaymentGateway.STRIPE],
-    },
+    // {
+    //   href: Routes.cards,
+    //   label: 'profile-sidebar-my-cards',
+    //   // MultiPayment: Make it dynamic or from mapper
+    //   cardsPayment: [PaymentGateway.STRIPE],
+    // },
     {
       href: Routes.help,
       label: 'profile-sidebar-help',
