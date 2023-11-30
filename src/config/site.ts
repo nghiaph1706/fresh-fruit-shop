@@ -53,10 +53,10 @@ export const siteSettings = {
       href: Routes.orders,
       label: 'profile-sidebar-orders',
     },
-    {
-      href: Routes.downloads,
-      label: 'profile-sidebar-downloads',
-    },
+    // {
+    //   href: Routes.downloads,
+    //   label: 'profile-sidebar-downloads',
+    // },
     {
       href: Routes.wishlists,
       label: 'profile-sidebar-my-wishlist',

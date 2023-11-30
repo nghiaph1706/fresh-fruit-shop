@@ -5,8 +5,8 @@ import { useRouter } from 'next/router';
 import classNames from 'classnames';
 import { useLogout, useUser } from '@/framework/user';
 import { useSettings } from '@/framework/settings';
-import {PaymentGateway} from '@/types';
-import {Routes} from '@/config/routes';
+import { PaymentGateway } from '@/types';
+import { Routes } from '@/config/routes';
 
 type DashboardSidebarProps = {
   className?: string;
@@ -20,7 +20,7 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ className }) => {
   const { pathname } = useRouter();
   return (
     <aside className={className}>
-      <div className="mb-5 overflow-hidden rounded border border-border-200 bg-light px-10 py-8">
+      {/* <div className="mb-5 overflow-hidden rounded border border-border-200 bg-light px-10 py-8">
         <h3 className="mb-4 border-b border-dashed border-border-200 pb-4 text-base font-semibold text-heading">
           {t('text-wallet-points')}
         </h3>
@@ -39,7 +39,7 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ className }) => {
             <span>{t('text-available')}</span>
           </div>
         </div>
-      </div>
+      </div> */}
 
       <div className="overflow-hidden rounded border border-border-200 bg-light">
         <ul className="py-7">
@@ -47,7 +47,13 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ className }) => {
             ?.slice(0, -1)
             .map((item: any, idx) => {
               // Optimize this
-              if (item?.href === Routes.cards && !item?.cardsPayment?.includes(settings?.paymentGateway?.toUpperCase())) return null;
+              if (
+                item?.href === Routes.cards &&
+                !item?.cardsPayment?.includes(
+                  settings?.paymentGateway?.toUpperCase()
+                )
+              )
+                return null;
               return (
                 <li className="py-1" key={idx}>
                   <Link
@@ -62,7 +68,7 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ className }) => {
                     {t(item.label)}
                   </Link>
                 </li>
-              )
+              );
             })}
         </ul>
         {/* End of top part menu */}
