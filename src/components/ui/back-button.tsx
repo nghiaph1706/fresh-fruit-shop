@@ -8,12 +8,12 @@ const BackButton = () => {
   const { t } = useTranslation('common');
   return (
     <button
-      className="inline-flex items-center justify-center text-accent font-semibold transition-colors hover:text-accent-hover focus:text-accent-hover focus:outline-none"
+      className="inline-flex items-center justify-center font-semibold text-accent transition-colors hover:text-accent-hover focus:text-accent-hover focus:outline-0"
       onClick={router.back}
     >
       <ArrowNarrowLeft
-        className={cn('w-5 h-5 ltr:mr-2 rtl:ml-2', {
-          'transform rotate-180':
+        className={cn('h-5 w-5 ltr:mr-2 rtl:ml-2', {
+          'rotate-180 transform':
             router.locale === 'ar' || router.locale === 'he',
         })}
         strokeWidth={1.7}

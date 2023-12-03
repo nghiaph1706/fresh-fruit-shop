@@ -6,6 +6,7 @@ import { useTranslation } from 'next-i18next';
 import { useModalAction } from '@/components/ui/modal/modal.context';
 import { productPlaceholder } from '@/lib/placeholders';
 import { PlusIcon } from '@/components/icons/plus-icon';
+import { ExternalIcon } from '@/components/icons/external-icon';
 
 type ArgonProps = {
   product: any;
@@ -14,7 +15,7 @@ type ArgonProps = {
 
 const Argon: React.FC<ArgonProps> = ({ product, className }) => {
   const { t } = useTranslation('common');
-  const { name, image, quantity, min_price, max_price, product_type } =
+  const { name, image, quantity, min_price, max_price, product_type, is_external } =
     product ?? {};
   const { price, basePrice, discount } = usePrice({
     amount: product.sale_price ? product.sale_price : product.price!,
@@ -47,9 +48,9 @@ const Argon: React.FC<ArgonProps> = ({ product, className }) => {
         <Image
           src={image?.original ?? productPlaceholder}
           alt={name}
-          layout="fill"
-          objectFit="contain"
-          className="product-image"
+          fill
+          sizes="(max-width: 768px) 100vw"
+          className="product-image object-contain"
         />
 
         {discount && (
@@ -59,14 +60,14 @@ const Argon: React.FC<ArgonProps> = ({ product, className }) => {
         )}
 
         <div className="absolute top-3 ltr:right-3 rtl:left-3 md:top-4 ltr:md:right-4 rtl:md:left-4">
-          {product_type.toLowerCase() === 'variable' ? (
+          {product_type.toLowerCase() === 'variable' || is_external ? (
             <>
               {Number(quantity) > 0 && (
                 <button
                   onClick={handleProductQuickView}
-                  className="flex h-7 w-7 items-center justify-center rounded border border-border-200 bg-light text-sm text-heading transition-colors hover:border-accent hover:bg-accent hover:text-light focus:border-accent focus:bg-accent focus:text-light focus:outline-none md:h-9 md:w-9"
+                  className="flex h-7 w-7 items-center justify-center rounded border border-border-200 bg-light text-sm text-heading transition-colors hover:border-accent hover:bg-accent hover:text-light focus:border-accent focus:bg-accent focus:text-light focus:outline-0 md:h-9 md:w-9"
                 >
-                  <PlusIcon className="h-5 w-5 stroke-2" />
+                  {is_external ? <ExternalIcon className="h-5 w-5 stroke-2" /> : <PlusIcon className="h-5 w-5 stroke-2" />}
                 </button>
               )}
             </>

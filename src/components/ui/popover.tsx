@@ -42,7 +42,7 @@ const PopOver = ({
         <>
           <Popover.Button
             className={cn(
-              'p-2 text-base opacity-80 ring-0 transition duration-200 hover:text-heading focus:outline-none',
+              'p-2 text-base opacity-80 ring-0 transition duration-200 hover:text-heading focus:outline-0',
               popOverButtonClass
             )}
             ref={reference}

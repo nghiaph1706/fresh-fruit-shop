@@ -80,7 +80,7 @@ const VerifiedItemList: React.FC<Props> = ({ className }) => {
   );
   return (
     <div className={className}>
-      <div className="flex flex-col pb-2 border-b border-border-200">
+      <div className="flex flex-col border-b border-border-200 pb-2">
         {!isEmptyCart ? (
           items?.map((item) => {
             const notAvailable = verifiedResponse?.unavailable_products?.find(
@@ -111,7 +111,7 @@ const VerifiedItemList: React.FC<Props> = ({ className }) => {
             <span className="flex items-center text-xs font-semibold text-red-500 ltr:mr-auto rtl:ml-auto">
               ({coupon?.code})
               <button onClick={() => setCoupon(null)}>
-                <CloseIcon className="w-3 h-3 ltr:ml-2 rtl:mr-2" />
+                <CloseIcon className="h-3 w-3 ltr:ml-2 rtl:mr-2" />
               </button>
             </span>
             <span className="text-sm font-semibold text-gray-800">
@@ -123,7 +123,7 @@ const VerifiedItemList: React.FC<Props> = ({ className }) => {
             <Coupon theme="dark" subtotal={base_amount} />
           </div>
         )}
-        <div className="flex justify-between pt-3 border-t-4 border-double border-border-200">
+        <div className="flex justify-between border-t-4 border-double border-border-200 pt-3">
           <p className="text-base font-semibold text-heading">
             {t('text-total')}
           </p>
@@ -140,10 +140,10 @@ const VerifiedItemList: React.FC<Props> = ({ className }) => {
       {use_wallet && !Boolean(payableAmount) ? null : (
         <PaymentGrid
           theme="bw"
-          className="p-5 mt-10 border border-gray-200 bg-light"
+          className="mt-10 rounded-md border border-gray-200 bg-light p-5"
         />
       )}
-      <PlaceOrderAction className="mt-8 h-[50px] w-full !bg-gray-800 font-normal transition-colors hover:!bg-gray-900">
+      <PlaceOrderAction className="mt-8 h-[50px] w-full font-normal transition-colors">
         {t('text-place-order')}
       </PlaceOrderAction>
     </div>

@@ -23,12 +23,13 @@ export default function Uploader({
   });
 
   const onDrop = useCallback(
-    (acceptedFiles) => {
+    (acceptedFiles: any) => {
       upload(acceptedFiles);
     },
     [upload]
   );
   const { getRootProps, getInputProps } = useDropzone({
+    //@ts-ignore
     accept: 'image/*',
     multiple,
     onDrop,
@@ -46,10 +47,10 @@ export default function Uploader({
   // multiple: false
   const thumbs = files.map((file: any, idx) => (
     <div
-      className="relative mt-2 inline-flex flex-col overflow-hidden rounded border border-border-100 ltr:mr-2 rtl:ml-2"
+      className="relative inline-flex flex-col mt-2 overflow-hidden border rounded border-border-100 ltr:mr-2 rtl:ml-2"
       key={idx}
     >
-      <div className="flex h-16 w-16 min-w-0 items-center justify-center overflow-hidden">
+      <div className="flex items-center justify-center w-16 h-16 min-w-0 overflow-hidden">
         {/* eslint-disable */}
         <img src={file.preview} alt={file?.name} />
       </div>
@@ -79,7 +80,7 @@ export default function Uploader({
           })}
         />
         <UploadIcon className="text-muted-light" />
-        <p className="mt-4 text-center text-sm text-body">
+        <p className="mt-4 text-sm text-center text-body">
           <span className="font-semibold text-accent">
             {t('text-upload-highlight')}
           </span>{' '}
@@ -88,14 +89,14 @@ export default function Uploader({
         </p>
       </div>
 
-      <aside className="mt-2 flex flex-wrap">
+      <aside className="flex flex-wrap mt-2">
         {!!thumbs.length && thumbs}
         {isLoading && (
-          <div className="mt-2 flex h-16 items-center ltr:ml-2 rtl:mr-2">
+          <div className="flex items-center h-16 mt-2 ltr:ml-2 rtl:mr-2">
             <Spinner
               text={t('text-loading')}
               simple={true}
-              className="h-6 w-6"
+              className="w-6 h-6"
             />
           </div>
         )}

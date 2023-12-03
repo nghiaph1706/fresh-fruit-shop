@@ -2,6 +2,8 @@ export const DressingTable: React.FC<React.SVGAttributes<{}>> = (props) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
+      width="39.867"
+      height="62"
       viewBox="0 0 39.867 62"
       fill="currentColor"
       {...props}

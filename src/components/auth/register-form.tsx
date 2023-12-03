@@ -87,7 +87,7 @@ function RegisterForm() {
         {t('text-already-account')}{' '}
         <button
           onClick={() => openModal('LOGIN_VIEW')}
-          className="font-semibold text-accent underline transition-colors duration-200 hover:text-accent-hover hover:no-underline focus:text-accent-hover focus:no-underline focus:outline-none ltr:ml-1 rtl:mr-1"
+          className="font-semibold text-accent underline transition-colors duration-200 hover:text-accent-hover hover:no-underline focus:text-accent-hover focus:no-underline focus:outline-0 ltr:ml-1 rtl:mr-1"
         >
           {t('text-login')}
         </button>

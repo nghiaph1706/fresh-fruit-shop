@@ -23,13 +23,13 @@ const Radio = React.forwardRef<HTMLInputElement, Props>(
             {...rest}
           />
 
-          <label htmlFor={id} className="text-body text-sm">
+          <label htmlFor={id} className="text-sm text-body">
             {label}
           </label>
         </div>
 
         {error && (
-          <p className="my-2 text-xs ltr:text-right rtl:text-left text-red-500">
+          <p className="my-2 text-xs text-red-500 ltr:text-right rtl:text-left">
             {error}
           </p>
         )}

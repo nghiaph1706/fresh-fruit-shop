@@ -3,7 +3,7 @@ import Select from '@/components/ui/select/select';
 import { RadioGroup } from '@headlessui/react';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import { useIsRTL } from '@/lib/locals';
 interface Plan {
   id: number | string;
@@ -95,7 +95,7 @@ const Sorting: React.FC<Props> = ({ variant = 'radio' }) => {
                 <RadioGroup.Option key={plan.id} value={plan}>
                   {({ checked }) => (
                     <>
-                      <div className="flex items-center w-full cursor-pointer">
+                      <div className="flex w-full cursor-pointer items-center">
                         <span
                           className={`h-[18px] w-[18px] rounded-full bg-white ltr:mr-3 rtl:ml-3 ${
                             checked

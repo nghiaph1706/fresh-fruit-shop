@@ -86,7 +86,9 @@ export default NextAuth({
     },
     async session({ session, token, user }) {
       const { access_token, provider } = token;
+      //@ts-ignore
       session.provider = provider;
+      //@ts-ignore
       session.access_token = access_token;
       return session;
     },

@@ -2,6 +2,9 @@ import cn from 'classnames';
 import { PlusIcon } from '@/components/icons/plus-icon';
 import { MinusIcon } from '@/components/icons/minus-icon';
 import { useTranslation } from 'next-i18next';
+import { twMerge } from 'tailwind-merge';
+import { PlusIconNew } from '@/components/icons/plus-icon';
+import { MinusIconNew } from '@/components/icons/minus-icon';
 
 type ButtonEvent = (
   e: React.MouseEvent<HTMLButtonElement | MouseEvent>
@@ -19,7 +22,8 @@ type CounterProps = {
     | 'pillVertical'
     | 'big'
     | 'text'
-    | 'bordered';
+    | 'bordered'
+    | 'florine';
   onDecrement: ButtonEvent;
   onIncrement: ButtonEvent;
   className?: string;
@@ -44,6 +48,7 @@ const variantClasses = {
   text: 'w-7 h-18 sm:w-20 sm:h-7 md:h-9 md:w-24 bg-accent flex-col-reverse sm:flex-row text-light rounded',
   bordered:
     'h-14 rounded text-heading bg-transparent inline-flex justify-between shrink-0',
+  florine: '',
 };
 
 const Counter: React.FC<CounterProps> = ({
@@ -58,23 +63,38 @@ const Counter: React.FC<CounterProps> = ({
 
   return (
     <div
-      className={cn('flex overflow-hidden', variantClasses[variant], className)}
+      className={twMerge(
+        variant !== 'florine'
+          ? cn('flex overflow-hidden', variantClasses[variant], className)
+          : cn(
+              'flex w-24 items-center justify-between rounded-[0.25rem] border border-[#dbdbdb]',
+              className
+            )
+      )}
     >
       <button
         onClick={onDecrement}
-        className={cn(
-          'cursor-pointer p-2 transition-colors duration-200 hover:bg-accent-hover focus:outline-none',
-          {
-            'px-3 py-3 sm:px-2': variant === 'single',
-            'px-5': variant === 'big',
-            'border border-gray-300 px-5 hover:border-accent hover:!bg-transparent ltr:rounded-l rtl:rounded-r':
-              variant === 'bordered',
-            'hover:!bg-gray-100': variant === 'pillVertical',
-          }
+        className={twMerge(
+          variant !== 'florine'
+            ? cn(
+                'cursor-pointer p-2 transition-colors duration-200 hover:bg-accent-hover focus:outline-0',
+                {
+                  'px-3 py-3 sm:px-2': variant === 'single',
+                  'px-5': variant === 'big',
+                  'border border-gray-300 px-5 hover:border-accent hover:!bg-transparent ltr:rounded-l rtl:rounded-r':
+                    variant === 'bordered',
+                  'hover:!bg-gray-100': variant === 'pillVertical',
+                }
+              )
+            : cn('p-2 text-base', disabled ? 'text-[#c1c1c1]' : 'text-accent')
         )}
       >
         <span className="sr-only">{t('text-minus')}</span>
-        <MinusIcon className="h-3 w-3 stroke-2.5" />
+        {variant !== 'florine' ? (
+          <MinusIcon className="h-3 w-3 stroke-2.5" />
+        ) : (
+          <MinusIconNew />
+        )}
       </button>
       <div
         className={cn(
@@ -89,20 +109,28 @@ const Counter: React.FC<CounterProps> = ({
       <button
         onClick={onIncrement}
         disabled={disabled}
-        className={cn(
-          'cursor-pointer p-2 transition-colors duration-200 hover:bg-accent-hover focus:outline-none',
-          {
-            'px-3 py-3 sm:px-2': variant === 'single',
-            'px-5': variant === 'big',
-            'border border-gray-300 px-5 hover:border-accent hover:!bg-transparent hover:!text-accent ltr:rounded-r rtl:rounded-l':
-              variant === 'bordered',
-            'hover:!bg-gray-100': variant === 'pillVertical',
-          }
-        )}
+        className={
+          variant !== 'florine'
+            ? cn(
+                'cursor-pointer p-2 transition-colors duration-200 hover:bg-accent-hover focus:outline-0',
+                {
+                  'px-3 py-3 sm:px-2': variant === 'single',
+                  'px-5': variant === 'big',
+                  'border border-gray-300 px-5 hover:border-accent hover:!bg-transparent hover:!text-accent ltr:rounded-r rtl:rounded-l':
+                    variant === 'bordered',
+                  'hover:!bg-gray-100': variant === 'pillVertical',
+                }
+              )
+            : cn('p-2 text-base', disabled ? 'text-[#c1c1c1]' : 'text-accent')
+        }
         title={disabled ? t('text-out-stock') : ''}
       >
         <span className="sr-only">{t('text-plus')}</span>
-        <PlusIcon className="md:w-4.5 h-3.5 w-3.5 stroke-2.5 md:h-4.5" />
+        {variant !== 'florine' ? (
+          <PlusIcon className="md:w-4.5 h-3.5 w-3.5 stroke-2.5 md:h-4.5" />
+        ) : (
+          <PlusIconNew />
+        )}
       </button>
     </div>
   );

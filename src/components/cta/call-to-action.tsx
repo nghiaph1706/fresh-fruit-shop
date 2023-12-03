@@ -13,7 +13,12 @@ const CallToAction = () => {
   return (
     <SectionBlock className="last:pb-0">
       <div className="relative flex w-full overflow-hidden rounded-xl bg-gray-100 px-6 py-12 md:px-10 xl:px-32 xl:py-32">
-        <Image src={PatternImg} layout="fill" alt="background pattern" />
+        <Image
+          src={PatternImg}
+          fill
+          alt="background pattern"
+          sizes="(max-width: 768px) 100vw"
+        />
         <div className="z-0 flex w-full justify-center lg:justify-between">
           <div className="flex max-w-[500px] flex-col items-center lg:items-start">
             <span className="mb-4 text-lg font-semibold uppercase sm:text-xl lg:font-bold">
@@ -33,7 +38,6 @@ const CallToAction = () => {
                   src={AppStoreImg}
                   width={338}
                   height={100}
-                  layout="responsive"
                   alt="app store button"
                 />
               </Link>
@@ -45,7 +49,6 @@ const CallToAction = () => {
                   src={PlayStoreImg}
                   width={334}
                   height={100}
-                  layout="responsive"
                   alt="play store button"
                 />
               </Link>
@@ -57,7 +60,6 @@ const CallToAction = () => {
               src={siteSettings.cta.mockup_img_src}
               width={400}
               height={386}
-              layout="responsive"
               alt="mockup"
             />
           </div>

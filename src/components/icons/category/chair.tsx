@@ -2,6 +2,8 @@ export const Chair: React.FC<React.SVGAttributes<{}>> = (props) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
+      width="40.4"
+      height="62"
       viewBox="0 0 40.4 62"
       fill="currentColor"
       {...props}

@@ -16,18 +16,17 @@ const CartItem = ({ item, notAvailable }: Props) => {
   return (
     <div
       className={cn(
-        'flex w-full space-x-3 rtl:space-x-reverse py-3 first:pt-0 last:pb-0'
+        'flex w-full space-x-3 py-3 first:pt-0 last:pb-0 rtl:space-x-reverse'
       )}
       key={item.id}
     >
-      <div className="w-[42px] h-[42px] flex-shrink-0 bg-gray-100">
+      <div className="relative h-[42px] w-[42px] flex-shrink-0 bg-gray-100">
         <Image
           src={item?.image ?? productPlaceholder}
           alt={item.name}
-          layout="responsive"
-          width={42}
-          height={42}
-          className="product-image rounded-md"
+          fill
+          sizes="(max-width: 768px) 100vw"
+          className="product-image fill rounded-md"
         />
       </div>
       <div className="flex w-full justify-between">
@@ -37,7 +36,7 @@ const CartItem = ({ item, notAvailable }: Props) => {
           </span>
           <span
             className={cn(
-              'text-xs font-semibold mt-1.5',
+              'mt-1.5 text-xs font-semibold',
               notAvailable ? 'text-red-500' : 'text-gray-500'
             )}
           >

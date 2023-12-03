@@ -6,6 +6,8 @@ import { useTranslation } from 'next-i18next';
 import { useModalAction } from '@/components/ui/modal/modal.context';
 import { productPlaceholder } from '@/lib/placeholders';
 import CartIcon from '@/components/icons/cart';
+import { useRouter } from 'next/router';
+import { twMerge } from 'tailwind-merge';
 
 type HeliumProps = {
   product: any;
@@ -14,8 +16,18 @@ type HeliumProps = {
 
 const Helium: React.FC<HeliumProps> = ({ product, className }) => {
   const { t } = useTranslation('common');
-  const { name, image, unit, quantity, min_price, max_price, product_type } =
-    product ?? {};
+  const { query } = useRouter();
+  const {
+    name,
+    image,
+    unit,
+    quantity,
+    min_price,
+    max_price,
+    product_type,
+    in_flash_sale,
+  } = product ?? {};
+
   const { price, basePrice, discount } = usePrice({
     amount: product.sale_price ? product.sale_price : product.price!,
     baseAmount: product.price,
@@ -35,23 +47,28 @@ const Helium: React.FC<HeliumProps> = ({ product, className }) => {
 
   return (
     <article
-      className={cn(
-        'product-card cart-type-helium h-full overflow-hidden rounded border border-border-200 bg-light transition-shadow duration-200 hover:shadow-sm',
-        className
+      className={twMerge(
+        cn(
+          'product-card cart-type-helium h-full overflow-hidden rounded border border-border-200 bg-light transition-shadow duration-200 hover:shadow-sm',
+          className
+        )
       )}
     >
       <div
         onClick={handleProductQuickView}
-        className="relative flex h-48 w-auto items-center justify-center sm:h-64"
+        className={cn(
+          'relative flex h-48 w-auto items-center justify-center sm:h-64',
+          query?.pages ? (query?.pages?.includes('medicine') ? 'm-4' : '') : ''
+        )}
         role="button"
       >
         <span className="sr-only">{t('text-product-image')}</span>
         <Image
           src={image?.original ?? productPlaceholder}
           alt={name}
-          layout="fill"
-          objectFit="contain"
-          className="product-image"
+          fill
+          sizes="(max-width: 768px) 100vw"
+          className="product-image block object-contain"
         />
         {discount && (
           <div className="absolute top-3 rounded-full bg-yellow-500 px-1.5 text-xs font-semibold leading-6 text-light ltr:right-3 rtl:left-3 sm:px-2 md:top-4 md:px-2.5 ltr:md:right-4 rtl:md:left-4">
@@ -88,7 +105,7 @@ const Helium: React.FC<HeliumProps> = ({ product, className }) => {
               {Number(quantity) > 0 && (
                 <button
                   onClick={handleProductQuickView}
-                  className="order-5 flex items-center justify-center rounded-full border-2 border-border-100 bg-light py-2 px-3 text-sm font-semibold text-accent transition-colors duration-300 hover:border-accent hover:bg-accent hover:text-light focus:border-accent focus:bg-accent focus:text-light focus:outline-none sm:order-4 sm:justify-start sm:px-4"
+                  className="order-5 flex items-center justify-center rounded-full border-2 border-border-100 bg-light px-3 py-2 text-sm font-semibold text-accent transition-colors duration-300 hover:border-accent hover:bg-accent hover:text-light focus:border-accent focus:bg-accent focus:text-light focus:outline-0 sm:order-4 sm:justify-start sm:px-4"
                 >
                   <CartIcon className="h-4 w-4 ltr:mr-2 rtl:ml-2" />
                   <span>{t('text-cart')}</span>

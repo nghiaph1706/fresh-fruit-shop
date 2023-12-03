@@ -3,7 +3,8 @@ export const Lips: React.FC<React.SVGAttributes<{}>> = (props) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 17.298 18"
+      width="17.298"
+      height="18"
       fill="currentColor"
       {...props}
     >

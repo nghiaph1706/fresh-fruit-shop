@@ -17,7 +17,13 @@ const Avatar: React.FC<AvatarProps> = ({ src, className, title, ...rest }) => {
       )}
       {...rest}
     >
-      <Image alt={title} src={src} layout="fill" priority={true} />
+      <Image
+        alt={title}
+        src={src}
+        fill
+        sizes="(max-width: 768px) 100vw"
+        priority={true}
+      />
     </div>
   );
 };

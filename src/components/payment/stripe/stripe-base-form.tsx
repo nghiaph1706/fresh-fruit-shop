@@ -16,6 +16,7 @@ import {
   useModalState,
 } from '@/components/ui/modal/modal.context';
 import { useCards } from '@/framework/card';
+import StipeElementViewHeader from '../stripe-element-view-header';
 
 interface Props {
   handleSubmit: any;
@@ -63,13 +64,18 @@ const StripeBaseForm: React.FC<Props> = ({
   };
 
   return (
-    <div className="payment-modal relative h-full w-screen max-w-md overflow-hidden rounded-[10px] bg-light md:h-auto md:min-h-0 lg:max-w-[46rem]">
+    <div className="payment-modal relative h-full w-screen max-w-md overflow-hidden rounded-[10px] bg-light md:h-auto md:min-h-0 lg:max-w-[46rem]">      
       <div className="p-6 lg:p-12">
         {!isEmpty(cardError) ? (
           <Alert className="mb-4" message={cardError} variant="error" />
         ) : (
           ''
         )}
+        <StipeElementViewHeader
+          paymentIntentInfo={paymentIntentInfo}
+          trackingNumber={trackingNumber}
+          paymentGateway={paymentGateway}
+        />
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
           <div>
             <label>

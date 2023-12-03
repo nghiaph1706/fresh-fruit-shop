@@ -27,7 +27,7 @@ const CartCounterButton = dynamic(
 
 const ProductPage: NextPageWithLayout<
   InferGetStaticPropsType<typeof getStaticProps>
-> = ({ product } : any) => {
+> = ({ product }: any) => {
   const { width } = useWindowSize();
   return (
     <>

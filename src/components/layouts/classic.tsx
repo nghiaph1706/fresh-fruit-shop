@@ -18,7 +18,7 @@ export default function ClassicLayout({ variables }: HomePageProps) {
       >
         <Categories layout="classic" variables={variables.categories} />
         <ProductGridHome
-          className="px-4 pb-8 lg:p-8"
+          className="px-4 pb-16 lg:p-8"
           variables={variables.products}
         />
       </Element>

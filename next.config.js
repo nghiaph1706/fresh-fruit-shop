@@ -1,17 +1,18 @@
 /** @type {import('next').NextConfig} */
-const withPWA = require('next-pwa');
 const runtimeCaching = require('next-pwa/cache');
 const { i18n } = require('./next-i18next.config');
-const nextConfig = {
+const withPWA = require('next-pwa')({
+  disable: process.env.NODE_ENV === 'development',
+  dest: 'public',
+  runtimeCaching,
+});
+
+module.exports = withPWA({
   reactStrictMode: true,
   i18n,
-  pwa: {
-    disable: process.env.NODE_ENV === 'development',
-    dest: 'public',
-    runtimeCaching,
-  },
   images: {
     domains: [
+      'res.cloudinary.com',
       'pickbazarlaravel.s3.ap-southeast-1.amazonaws.com',
       'pixarlaravel.s3.ap-southeast-1.amazonaws.com',
       'lh3.googleusercontent.com',
@@ -20,7 +21,7 @@ const nextConfig = {
       'i.pravatar.cc',
     ],
   },
-  ...(process.env.APPLICATION_MODE === 'production' && {
+    ...(process.env.APPLICATION_MODE === 'production' && {
     typescript: {
       ignoreBuildErrors: true,
     },
@@ -28,6 +29,4 @@ const nextConfig = {
       ignoreDuringBuilds: true,
     },
   }),
-};
-
-module.exports = withPWA(nextConfig);
+});

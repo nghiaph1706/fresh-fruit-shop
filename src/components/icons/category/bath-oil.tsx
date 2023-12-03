@@ -3,7 +3,8 @@ export const BathOil: React.FC<React.SVGAttributes<{}>> = (props) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 17.3 17.3"
+      width="17.3"
+      height="17.3"
       fill="currentColor"
       {...props}
     >

@@ -13,7 +13,7 @@ import { useAtom } from 'jotai';
 import { clearCheckoutAtom } from '@/store/checkout';
 import SuborderItems from '@/components/orders/suborder-items';
 import isEmpty from 'lodash/isEmpty';
-import { OrderStatus, PaymentStatus } from '@/types';
+import { OrderStatus, PaymentStatus, RefundStatus } from '@/types';
 import { HomeIconNew } from '@/components/icons/home-icon-new';
 import OrderViewHeader from './order-view-header';
 import OrderStatusProgressBox from '@/components/orders/order-status-progress-box';
@@ -25,12 +25,13 @@ function OrderView({ order, language, loadingStatus }: any) {
 
   useEffect(() => {
     resetCart();
+    //@ts-ignore
     resetCheckout();
   }, [resetCart, resetCheckout]);
 
   const { price: total } = usePrice({ amount: order?.paid_total! });
   const { price: wallet_total } = usePrice({
-    amount: order?.wallet_point?.amount!,
+    amount: order?.wallet_point?.amount! ?? 0,
   });
   const { price: sub_total } = usePrice({ amount: order?.amount! });
   const { price: shipping_charge } = usePrice({
@@ -38,6 +39,14 @@ function OrderView({ order, language, loadingStatus }: any) {
   });
   const { price: tax } = usePrice({ amount: order?.sales_tax ?? 0 });
   const { price: discount } = usePrice({ amount: order?.discount ?? 0 });
+
+  const amountPayable: number =
+    order?.payment_status !== PaymentStatus.SUCCESS
+      ? order?.paid_total! - order?.wallet_point?.amount!
+      : 0;
+
+  const { price: amountDue } = usePrice({ amount: amountPayable });
+
   return (
     <div className="p-4 sm:p-8">
       <div className="mx-auto w-full max-w-screen-lg">
@@ -51,10 +60,14 @@ function OrderView({ order, language, loadingStatus }: any) {
           </Link>
         </div>
         <div className="relative overflow-hidden rounded border shadow-sm">
-          <OrderViewHeader order={order} buttonSize="small" loading={loadingStatus} />
+          <OrderViewHeader
+            order={order}
+            buttonSize="small"
+            loading={loadingStatus}
+          />
           <div className="bg-light p-6 sm:p-8 lg:p-12">
             <div className="mb-6 grid gap-4 sm:grid-cols-2 md:mb-12 lg:grid-cols-4">
-              <div className="rounded border border-border-200 py-4 px-5 shadow-sm">
+              <div className="rounded border border-border-200 px-5 py-4 shadow-sm">
                 <h3 className="mb-2 text-sm font-semibold text-heading">
                   {t('text-order-number')}
                 </h3>
@@ -62,7 +75,7 @@ function OrderView({ order, language, loadingStatus }: any) {
                   {order?.tracking_number}
                 </p>
               </div>
-              <div className="rounded border border-border-200 py-4 px-5 shadow-sm">
+              <div className="rounded border border-border-200 px-5 py-4 shadow-sm">
                 <h3 className="mb-2 text-sm font-semibold text-heading">
                   {t('text-date')}
                 </h3>
@@ -70,13 +83,14 @@ function OrderView({ order, language, loadingStatus }: any) {
                   {dayjs(order?.created_at).format('MMMM D, YYYY')}
                 </p>
               </div>
-              <div className="rounded border border-border-200 py-4 px-5 shadow-sm">
+              <div className="rounded border border-border-200 px-5 py-4 shadow-sm">
                 <h3 className="mb-2 text-sm font-semibold text-heading">
                   {t('text-total')}
                 </h3>
                 <p className="text-sm text-body-dark">{total}</p>
               </div>
-              <div className="rounded border border-border-200 py-4 px-5 shadow-sm">
+
+              <div className="rounded border border-border-200 px-5 py-4 shadow-sm">
                 <h3 className="mb-2 text-sm font-semibold text-heading">
                   {t('text-payment-method')}
                 </h3>
@@ -104,59 +118,64 @@ function OrderView({ order, language, loadingStatus }: any) {
                 <div>
                   <p className="mt-5 flex text-body-dark">
                     <strong className="w-5/12 text-sm font-semibold text-heading sm:w-4/12">
-                      {t('text-sub-total')}
+                      {t('text-sub-total')} :
                     </strong>
-                    :
                     <span className="w-7/12 text-sm ltr:pl-4 rtl:pr-4 sm:w-8/12 ">
                       {sub_total}
                     </span>
                   </p>
                   <p className="mt-5 flex text-body-dark">
                     <strong className="w-5/12 text-sm font-semibold text-heading sm:w-4/12">
-                      {t('text-shipping-charge')}
+                      {t('text-shipping-charge')} :
                     </strong>
-                    :
                     <span className="w-7/12 text-sm ltr:pl-4 rtl:pr-4 sm:w-8/12 ">
                       {shipping_charge}
                     </span>
                   </p>
                   <p className="mt-5 flex text-body-dark">
                     <strong className="w-5/12 text-sm font-semibold text-heading sm:w-4/12">
-                      {t('text-tax')}
+                      {t('text-tax')} :
                     </strong>
-                    :
                     <span className="w-7/12 text-sm ltr:pl-4 rtl:pr-4 sm:w-8/12 ">
                       {tax}
                     </span>
                   </p>
                   <p className="mt-5 flex text-body-dark">
                     <strong className="w-5/12 text-sm font-semibold text-heading sm:w-4/12">
-                      {t('text-discount')}
+                      {t('text-discount')} :
                     </strong>
-                    :
                     <span className="w-7/12 text-sm ltr:pl-4 rtl:pr-4 sm:w-8/12 ">
                       {discount}
                     </span>
                   </p>
                   <p className="mt-5 flex text-body-dark">
                     <strong className="w-5/12 text-sm font-semibold text-heading sm:w-4/12">
-                      {t('text-total')}
+                      {t('text-total')} :
                     </strong>
-                    :
                     <span className="w-7/12 text-sm ltr:pl-4 rtl:pr-4 sm:w-8/12">
                       {total}
                     </span>
                   </p>
-                  {wallet_total && (
-                    <p className="mt-5 flex text-body-dark">
-                      <strong className="w-5/12 text-sm font-semibold text-heading sm:w-4/12">
-                        {t('text-paid-from-wallet')}
-                      </strong>
-                      :
-                      <span className="w-7/12 text-sm ltr:pl-4 rtl:pr-4 sm:w-8/12">
-                        {wallet_total}
-                      </span>
-                    </p>
+                  {order?.wallet_point?.amount! && (
+                    <>
+                      <p className="mt-5 flex text-body-dark">
+                        <strong className="w-5/12 text-sm font-semibold text-heading sm:w-4/12">
+                          {t('text-paid-from-wallet')} :
+                        </strong>
+                        <span className="w-7/12 text-sm ltr:pl-4 rtl:pr-4 sm:w-8/12">
+                          {wallet_total}
+                        </span>
+                      </p>
+
+                      <p className="mt-5 flex text-body-dark">
+                        <strong className="w-5/12 text-sm font-semibold text-heading sm:w-4/12">
+                          {t('text-amount-due')} :
+                        </strong>
+                        <span className="w-7/12 text-sm ltr:pl-4 rtl:pr-4 sm:w-8/12">
+                          {amountDue}
+                        </span>
+                      </p>
+                    </>
                   )}
                 </div>
               </div>
@@ -167,11 +186,10 @@ function OrderView({ order, language, loadingStatus }: any) {
                   {t('text-order-details')}
                 </h2>
                 <div>
-                <p className="mt-5 flex text-body-dark">
+                  <p className="mt-5 flex text-body-dark">
                     <strong className="w-4/12 text-sm font-semibold text-heading">
-                      {t('text-name')}
+                      {t('text-name')} :
                     </strong>
-                    :
                     <span className="w-8/12 text-sm ltr:pl-4 rtl:pr-4 ">
                       {order?.customer_name}
                     </span>
@@ -179,9 +197,8 @@ function OrderView({ order, language, loadingStatus }: any) {
 
                   <p className="mt-5 flex text-body-dark">
                     <strong className="w-4/12 text-sm font-semibold text-heading">
-                      {t('text-total-item')}
+                      {t('text-total-item')} :
                     </strong>
-                    :
                     <span className="w-8/12 text-sm ltr:pl-4 rtl:pr-4 ">
                       {formatString(order?.products?.length, t('text-item'))}
                     </span>
@@ -189,9 +206,8 @@ function OrderView({ order, language, loadingStatus }: any) {
                   {!isEmpty(order?.delivery_time) && (
                     <p className="mt-5 flex text-body-dark">
                       <strong className="w-4/12 text-sm font-semibold text-heading">
-                        {t('text-deliver-time')}
+                        {t('text-deliver-time')} :
                       </strong>
-                      :
                       <span className="w-8/12 text-sm ltr:pl-4 rtl:pr-4 ">
                         {order?.delivery_time}
                       </span>
@@ -200,9 +216,8 @@ function OrderView({ order, language, loadingStatus }: any) {
                   {!isEmpty(order?.shipping_address) && (
                     <p className="mt-5 flex text-body-dark">
                       <strong className="w-4/12 text-sm font-semibold text-heading">
-                        {t('text-shipping-address')}
+                        {t('text-shipping-address')} :
                       </strong>
-                      :
                       <span className="w-8/12 text-sm ltr:pl-4 rtl:pr-4 ">
                         {formatAddress(order?.shipping_address!)}
                       </span>
@@ -211,9 +226,8 @@ function OrderView({ order, language, loadingStatus }: any) {
                   {!isEmpty(order?.billing_address) && (
                     <p className="mt-5 flex text-body-dark">
                       <strong className="w-4/12 text-sm font-semibold text-heading">
-                        {t('text-billing-address')}
+                        {t('text-billing-address')} :
                       </strong>
-                      :
                       <span className="w-8/12 text-sm ltr:pl-4 rtl:pr-4">
                         {formatAddress(order?.billing_address!)}
                       </span>
@@ -224,7 +238,15 @@ function OrderView({ order, language, loadingStatus }: any) {
               {/* end of order details */}
             </div>
             <div className="mt-12">
-              <OrderItems products={order?.products} orderId={order?.id} />
+              <OrderItems
+                products={order?.products}
+                orderId={order?.id}
+                orderStatus={order?.order_status}
+                refund={Boolean(
+                  order?.refund?.status ===
+                    RefundStatus?.APPROVED?.toLowerCase()
+                )}
+              />
             </div>
             {order?.children?.length > 1 ? (
               <div>
@@ -243,11 +265,25 @@ function OrderView({ order, language, loadingStatus }: any) {
                   </div>
                   {Array.isArray(order?.children) && order?.children.length && (
                     <div className="">
-                      <SuborderItems items={order?.children} />
+                      <SuborderItems
+                        items={order?.children}
+                        orderStatus={order?.order_status}
+                      />
                     </div>
                   )}
                 </div>
               </div>
+            ) : null}
+
+            {order?.note ? (
+              <>
+                <h2 className="mt-12 mb-5 text-xl font-bold text-heading">
+                  {t('common:text-purchase-note')}
+                </h2>
+                <div className="mb-12 flex items-start rounded border border-gray-700 bg-gray-100 p-4">
+                  <p className="text-sm text-heading">{order?.note}</p>
+                </div>
+              </>
             ) : null}
           </div>
         </div>

@@ -17,7 +17,7 @@ export function isPaymentPending(
     PaymentGateway.CASH,
     PaymentGateway.FULL_WALLET_PAYMENT,
   ].includes(paymentGateway);
-  const isOrderPending = ![OrderStatus.CANCELLED].includes(orderStatus);
+  const isOrderPending = ![OrderStatus.CANCELLED, OrderStatus.REFUNDED].includes(orderStatus);
   return (
     isPaymentCOD &&
     isOrderPending &&

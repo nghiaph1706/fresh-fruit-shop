@@ -5,7 +5,6 @@ export const Shirts: React.FC<React.SVGAttributes<{}>> = (props) => {
       xmlns="http://www.w3.org/2000/svg"
       width="15.429"
       height="18"
-      viewBox="0 0 15.429 18"
       fill="currentColor"
       {...props}
     >

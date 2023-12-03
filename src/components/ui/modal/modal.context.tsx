@@ -9,6 +9,7 @@ type MODAL_VIEWS =
   | 'ADD_OR_UPDATE_CHECKOUT_CONTACT'
   | 'ADD_OR_UPDATE_PROFILE_CONTACT'
   | 'ADD_OR_UPDATE_GUEST_ADDRESS'
+  | 'LOCATION_BASED_SHOP'
   | 'DELETE_ADDRESS'
   | 'PRODUCT_DETAILS'
   | 'REFUND_REQUEST'
@@ -20,10 +21,12 @@ type MODAL_VIEWS =
   | 'REVIEW_IMAGE_POPOVER'
   | 'USE_NEW_PAYMENT'
   | 'PAYMENT_MODAL'
+  | 'STRIPE_ELEMENT_MODAL'
   | 'DELETE_CARD_MODAL'
   | 'ADD_NEW_CARD'
   | 'ADD_NEW_CARD_DURING_PAYMENT'
-  | 'USE_SAVED_CARD';
+  | 'USE_SAVED_CARD'
+  | 'GATEWAY_MODAL';
 
 interface State {
   view?: MODAL_VIEWS;
@@ -68,7 +71,9 @@ const ModalActionContext = React.createContext<
 >(undefined);
 ModalActionContext.displayName = 'ModalActionContext';
 
-export const ModalProvider: React.FC = ({ children }) => {
+export const ModalProvider: React.FC<{ children?: React.ReactNode }> = ({
+  children,
+}) => {
   const [state, dispatch] = React.useReducer(modalReducer, initialState);
   return (
     <ModalStateContext.Provider value={state}>

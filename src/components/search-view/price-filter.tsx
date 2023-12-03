@@ -1,8 +1,8 @@
 import Slider from '@/components/ui/forms/range-slider';
 import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/router';
-import { useTranslation } from 'react-i18next';
-const { Range } = Slider;
+import { useTranslation } from 'next-i18next';
+
 const defaultPriceRange = [0, 1000];
 const PriceFilter = () => {
   const { t } = useTranslation('common');
@@ -21,6 +21,7 @@ const PriceFilter = () => {
   }, [selectedValues]);
 
   function handleChange(value: number[]) {
+    setState(value);
     router.push({
       pathname: router.pathname,
       query: {
@@ -33,16 +34,16 @@ const PriceFilter = () => {
   return (
     <>
       <span className="sr-only">{t('text-sort-by-price')}</span>
-      <Range
+      <Slider
         allowCross={false}
+        range
         min={0}
         max={2000}
         //@ts-ignore
         defaultValue={state}
         //@ts-ignore
         value={state}
-        onChange={(value) => setState(value)}
-        onAfterChange={handleChange}
+        onChange={(value: any) => handleChange(value)}
       />
       <div className="grid grid-cols-2 gap-3 mt-4">
         <div className="flex flex-col items-start p-2 bg-gray-100 border border-gray-200 rounded">

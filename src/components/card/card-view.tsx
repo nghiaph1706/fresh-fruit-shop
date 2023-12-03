@@ -70,7 +70,6 @@ const CardsView = ({
                 src={images[network]}
                 width={40}
                 height={28}
-                layout="responsive"
                 alt={t('text-company')}
               />
             ) : (
@@ -78,7 +77,6 @@ const CardsView = ({
                 src={Fallback}
                 width={40}
                 height={28}
-                layout="responsive"
                 alt={t('text-company')}
               />
             )}

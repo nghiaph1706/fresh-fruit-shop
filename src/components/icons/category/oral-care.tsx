@@ -3,6 +3,8 @@ export const OralCare: React.FC<React.SVGAttributes<{}>> = (props) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
+      width="17.65"
+      height="17.65"
       viewBox="0 0 17.65 17.65"
       fill="currentColor"
       {...props}

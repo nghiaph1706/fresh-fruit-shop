@@ -14,6 +14,8 @@ import Link from '@/components/ui/link';
 import { Routes } from '@/config/routes';
 import ErrorMessage from '@/components/ui/error-message';
 import { useRefunds } from '@/framework/order';
+import { useRouter } from 'next/router';
+import { Refund } from '@/types';
 type AlignType = 'left' | 'right' | 'center';
 const RenderStatusBadge: React.FC<{ status: string }> = ({ status }) => {
   const { t } = useTranslation('common');
@@ -32,10 +34,12 @@ const RenderStatusBadge: React.FC<{ status: string }> = ({ status }) => {
 const RefundView: React.FC = () => {
   const { t } = useTranslation('common');
   const { alignLeft, alignRight } = useIsRTL();
+  const { locale= 'en' } = useRouter();
   const { error, refunds } = useRefunds({
     limit: 10,
+    language: locale
   });
-  let err:any = error;
+  let err: any = error;
   const refundTableColumns = useMemo(
     () => [
       {
@@ -55,8 +59,8 @@ const RefundView: React.FC = () => {
         ellipsis: true,
         className: '!text-sm',
         width: 220,
-        render: function renderQuantity(title: any) {
-          return <p className="whitespace-nowrap">{title}</p>;
+        render: function renderQuantity(title: any, record: Refund) {
+          return <p className="whitespace-nowrap">{title ?? record?.refund_reason?.name! }</p>;
         },
       },
       {
@@ -124,7 +128,7 @@ const RefundView: React.FC = () => {
         render: (order: any) => (
           <Link
             href={Routes.order(order?.tracking_number)}
-            className="inline-block text-body transition duration-200 hover:text-accent-hover focus:text-accent-hover"
+            className="inline-block transition duration-200 text-body hover:text-accent-hover focus:text-accent-hover"
             title={t('text-view-order')}
           >
             <Eye width={20} />
@@ -136,15 +140,17 @@ const RefundView: React.FC = () => {
   );
   if (err) return <ErrorMessage message={err?.message} />;
   return (
-    <Card className="min-h-screen w-full self-stretch overflow-hidden lg:min-h-0">
-      <h3 className="mb-8 text-center text-2xl font-semibold text-heading">
-        {t('text-my-refunds')}
-      </h3>
+    <Card className="self-stretch w-full min-h-screen overflow-hidden lg:min-h-0">
+      <div className="flex items-center justify-center mb-8 sm:mb-10">
+        <h3 className="text-lg font-semibold text-center text-heading sm:text-xl">
+          {t('text-my-refunds')}
+        </h3>
+      </div>
       <Table
         columns={refundTableColumns}
         data={refunds}
         rowKey={(record: any) => record.created_at}
-        className="orderDetailsTable w-full border border-gray-200"
+        className="w-full border border-gray-200 orderDetailsTable"
         scroll={{ x: 500, y: 700 }}
       />
     </Card>

@@ -29,62 +29,13 @@ import { useUser } from '@/framework/user';
 import { useInWishlist, useToggleWishlist } from '@/framework/wishlist';
 import { useIntersection } from 'react-use';
 import { StarIcon } from '@/components/icons/star-icon';
+import dynamic from 'next/dynamic';
 
-function FavoriteButton({
-  productId,
-  className,
-}: {
-  productId: string;
-  className?: string;
-}) {
-  const { isAuthorized } = useUser();
-  const { toggleWishlist, isLoading: adding } = useToggleWishlist(productId);
-  const { inWishlist, isLoading: checking } = useInWishlist({
-    enabled: isAuthorized,
-    product_id: productId,
-  });
+const FavoriteButton = dynamic(
+  () => import('@/components/products/details/favorite-button'),
+  { ssr: false }
+);
 
-  const { openModal } = useModalAction();
-  function toggle() {
-    if (!isAuthorized) {
-      openModal('LOGIN_VIEW');
-      return;
-    }
-    toggleWishlist({ product_id: productId });
-  }
-  const isLoading = adding || checking;
-  if (isLoading) {
-    return (
-      <div
-        className={classNames(
-          'mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-gray-300',
-          className
-        )}
-      >
-        <Spinner simple={true} className="flex h-5 w-5" />
-      </div>
-    );
-  }
-  return (
-    <button
-      type="button"
-      className={classNames(
-        'mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-gray-300 transition-colors',
-        {
-          '!border-accent': inWishlist,
-        },
-        className
-      )}
-      onClick={toggle}
-    >
-      {inWishlist ? (
-        <HeartFillIcon className="h-5 w-5 text-accent" />
-      ) : (
-        <HeartOutlineIcon className="h-5 w-5 text-accent" />
-      )}
-    </button>
-  );
-}
 type Props = {
   product: Product;
   backBtn?: boolean;
@@ -108,6 +59,8 @@ const Details: React.FC<Props> = ({
     shop,
     slug,
     ratings,
+    video,
+    product_type,
   } = product ?? {};
 
   const { t } = useTranslation('common');
@@ -144,8 +97,10 @@ const Details: React.FC<Props> = ({
   };
 
   const variations = useMemo(
-    () => getVariations(product?.variations),
-    [product?.variations]
+    () =>
+      product_type?.toLowerCase() === 'variable' &&
+      getVariations(product?.variations),
+    [product?.variations, product_type]
   );
   const isSelected = isVariationSelected(variations, attributes);
   let selectedVariation: any = {};
@@ -165,7 +120,8 @@ const Details: React.FC<Props> = ({
     });
   };
 
-  const hasVariations = !isEmpty(variations);
+  const hasVariations =
+    !isEmpty(variations) && product_type?.toLowerCase() === 'variable';
   const previewImages = displayImage(selectedVariation?.image, gallery, image);
 
   return (
@@ -184,7 +140,12 @@ const Details: React.FC<Props> = ({
           <div className="product-gallery h-full">
             <ThumbsCarousel
               gallery={previewImages}
-              hideThumbs={previewImages.length <= 1}
+              video={video}
+              hideThumbs={
+                previewImages.length && video?.length
+                  ? false
+                  : previewImages.length <= 1
+              }
             />
           </div>
         </div>
@@ -207,12 +168,12 @@ const Details: React.FC<Props> = ({
                 {name}
               </h1>
 
-              <span>
+              <div>
                 <FavoriteButton
                   productId={id}
                   className={classNames({ 'mr-1': isModal })}
                 />
-              </span>
+              </div>
             </div>
             <div className="mt-2 flex items-center justify-between">
               {unit && !hasVariations && (
@@ -279,27 +240,33 @@ const Details: React.FC<Props> = ({
                 />
               </div>
 
-              {!hasVariations && (
-                <>
-                  {Number(quantity) > 0 ? (
-                    <span className="whitespace-nowrap text-base text-body ltr:lg:ml-7 rtl:lg:mr-7">
-                      {quantity} {t('text-pieces-available')}
-                    </span>
-                  ) : (
-                    <div className="whitespace-nowrap text-base text-red-500 ltr:lg:ml-7 rtl:lg:mr-7">
-                      {t('text-out-stock')}
-                    </div>
-                  )}
-                </>
-              )}
+              {
+                !product?.is_external ? (
+                  !hasVariations && (
+                    <>
+                      {Number(quantity) > 0 ? (
+                        <span className="whitespace-nowrap text-base text-body ltr:lg:ml-7 rtl:lg:mr-7">
+                          {quantity} {t('text-pieces-available')}
+                        </span>
+                      ) : (
+                        <div className="whitespace-nowrap text-base text-red-500 ltr:lg:ml-7 rtl:lg:mr-7">
+                          {t('text-out-stock')}
+                        </div>
+                      )}
+                    </>
+                  )
+                ) : ''
+              }
+
+
               {!isEmpty(selectedVariation) && (
                 <span className="whitespace-nowrap text-base text-body ltr:lg:ml-7 rtl:lg:mr-7">
                   {selectedVariation?.is_disable ||
-                  selectedVariation.quantity === 0
+                    selectedVariation.quantity === 0
                     ? t('text-out-stock')
                     : `${selectedVariation.quantity} ${t(
-                        'text-pieces-available'
-                      )}`}
+                      'text-pieces-available'
+                    )}`}
                 </span>
               )}
             </div>

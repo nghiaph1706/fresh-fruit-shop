@@ -1,4 +1,4 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import cn from 'classnames';
 import Button from '@/components/ui/button';
 import ProductLoader from '@/components/ui/loaders/product-loader';
@@ -44,8 +44,8 @@ export function Grid({
 
   if (!isLoading && !products?.length) {
     return (
-      <div className="min-h-full w-full px-4 pt-6 pb-8 lg:p-8">
-        <NotFound text="text-not-found" className="mx-auto w-7/12" />
+      <div className="w-full min-h-full px-4 pt-6 pb-8 lg:p-8">
+        <NotFound text="text-not-found" className="w-7/12 mx-auto" />
       </div>
     );
   }
@@ -72,11 +72,11 @@ export function Grid({
             ))}
       </div>
       {hasMore && (
-        <div className="mt-8 flex justify-center lg:mt-12">
+        <div className="flex justify-center mt-8 lg:mt-12">
           <Button
             loading={isLoadingMore}
             onClick={loadMore}
-            className="h-11 text-sm font-semibold md:text-base"
+            className="text-sm font-semibold h-11 md:text-base"
           >
             {t('text-load-more')}
           </Button>
@@ -100,7 +100,7 @@ export default function ProductsGrid({
   const { products, loadMore, isLoadingMore, isLoading, hasMore, error } =
     useProducts(variables);
 
-  const productsItem:any = products;
+  const productsItem: any = products;
   return (
     <Grid
       products={productsItem}

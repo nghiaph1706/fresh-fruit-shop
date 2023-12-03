@@ -11,6 +11,11 @@ export interface GetParams {
   language?: string;
 }
 
+export interface Success {
+  success: boolean;
+  message: string;
+}
+
 export type LayoutProps = {
   readonly children: ReactNode;
 };
@@ -19,6 +24,7 @@ export interface HomePageProps {
   variables: {
     products: any;
     popularProducts?: any;
+    bestSellingProducts?: any;
     categories: any;
     types: any;
   };
@@ -41,12 +47,25 @@ export interface SearchParamOptions {
   rating: string;
   question: string;
   notice: string;
+  faq_type: string;
+  issued_by: string;
+  title: string;
+  target: string;
+  shops: string;
 }
 
 export interface QueryOptions {
   language: string;
   page?: number;
   limit?: number;
+}
+
+export interface RefundPolicyQueryOptions extends QueryOptions {
+  title: string;
+  target: 'vendor' | 'customer';
+  status: 'approved' | 'pending';
+  orderBy: string;
+  sortedBy: string;
 }
 
 export interface PaginatorInfo<T> {
@@ -99,7 +118,20 @@ export interface PopularProductQueryOptions extends QueryOptions {
   range: number;
 }
 
+export interface BestSellingProductQueryOptions extends QueryOptions {
+  language: string;
+  type_slug: string;
+  with: string;
+  range: number;
+}
+
 export interface CategoryQueryOptions extends QueryOptions {
+  language: string;
+  parent: string | null;
+  type: string;
+}
+
+export interface RefundQueryOptions extends QueryOptions {
   language: string;
   parent: string | null;
   type: string;
@@ -131,6 +163,32 @@ export interface ManufacturerQueryOptions extends QueryOptions {
   name?: string;
   orderBy?: string;
   language: any;
+}
+
+export interface FaqsQueryOptions extends QueryOptions {
+  faq_title: string;
+  issued_by: string;
+  faq_type: string;
+  orderBy: string;
+  shop_id: string;
+}
+
+export interface FlashSaleQueryOptions extends QueryOptions {
+  title?: string;
+  shop_id?: string;
+}
+
+export interface FlashSaleProductsQueryOptions extends QueryOptions {
+  slug: string;
+}
+
+export interface TermsAndConditionsQueryOptions extends QueryOptions {
+  title: string;
+  issued_by: string;
+  type: string;
+  orderBy: string;
+  shop_id: string;
+  is_approved: boolean;
 }
 
 export interface CouponQueryOptions extends QueryOptions {
@@ -174,6 +232,9 @@ export interface Product {
   manufacturer: Manufacturer;
   tags: Tag[];
   is_digital: boolean;
+  is_external: boolean;
+  external_product_url: string;
+  external_product_button_text: string;
   product_type: string;
   description: string;
   type: Type;
@@ -182,6 +243,7 @@ export interface Product {
   min_price: number;
   max_price: number;
   image: Attachment;
+  status: string;
   gallery: Attachment[];
   shop: Shop;
   unit: string;
@@ -197,6 +259,10 @@ export interface Product {
   created_at: string;
   updated_at: string;
   language: string;
+  video?: {
+    url: string;
+  }[];
+  in_flash_sale: boolean;
 }
 
 export interface RatingCount {
@@ -234,12 +300,34 @@ export interface Type {
   };
 }
 
+export interface ShopAddress {
+  country: string;
+  city: string;
+  state: string;
+  zip: string;
+  street_address: string;
+}
+
 export interface Shop {
+  __typename?: string;
   id: string;
   name: string;
   slug: string;
   description: string;
   cover_image: Attachment;
+  logo?: Attachment;
+  is_active?: boolean;
+  distance?: number;
+  address: UserAddress;
+  settings?: {
+    contact?: string;
+    socials?: any;
+    location?: GoogleMapLocation;
+    website?: string;
+  };
+  notifications?: string | null;
+  lat?: number | string | null;
+  lng?: number | string | null;
 }
 
 export interface Author {
@@ -337,7 +425,6 @@ export interface Order {
   sales_tax: number;
   total: number;
   paid_total: number;
-  payment_gateway?: string;
   coupon?: Coupon;
   discount?: number;
   delivery_fee?: number;
@@ -352,6 +439,7 @@ export interface Order {
   payment_intent?: PaymentIntent;
   order_status: string;
   payment_status: string;
+  payment_gateway: string;
 }
 
 export interface VerifyCouponInputType {
@@ -387,11 +475,13 @@ export interface CreateRefundInput {
   order_id: string;
   title: string;
   description: string;
+  refund_reason_id: string;
   images: Attachment[];
 }
 
 export interface CreateOrderPaymentInput {
   tracking_number: string;
+  payment_gateway: string;
 }
 
 export interface CreateFeedbackInput {
@@ -433,7 +523,33 @@ export interface Refund {
   status: RefundStatus;
   shop: Shop;
   order: Order;
+  refund_reason: RefundReason;
   customer: User;
+  created_at: string;
+  updated_at: string;
+}
+export interface RefundPolicy {
+  id: string;
+  title: string;
+  slug: string;
+  target: string;
+  status: string;
+  description?: string;
+  language: string;
+  shop_id?: string;
+  shop?: Shop;
+  refunds?: Refund[];
+  translated_languages: Array<string>;
+  created_at?: string;
+  updated_at?: string;
+  deleted_at?: string;
+}
+
+export interface RefundReason {
+  id: string;
+  name: string;
+  slug: string;
+  language: string;
   created_at: string;
   updated_at: string;
 }
@@ -446,6 +562,13 @@ export enum PaymentGateway {
   PAYPAL = 'PAYPAL',
   MOLLIE = 'MOLLIE',
   RAZORPAY = 'RAZORPAY',
+  SSLCOMMERZ = 'SSLCOMMERZ',
+  PAYSTACK = 'PAYSTACK',
+  PAYMONGO = 'PAYMONGO',
+  XENDIT = 'XENDIT',
+  IYZICO = 'IYZICO',
+  BKASH = 'BKASH',
+  FLUTTERWAVE = 'FLUTTERWAVE',
 }
 
 export enum OrderStatus {
@@ -465,11 +588,12 @@ export enum PaymentStatus {
   SUCCESS = 'payment-success',
   FAILED = 'payment-failed',
   REVERSAL = 'payment-reversal',
+  REFUNDED = 'payment-refunded',
   COD = 'cash-on-delivery',
   AWAITING_FOR_APPROVAL = 'payment-awaiting-for-approval',
 }
 
-enum RefundStatus {
+export enum RefundStatus {
   APPROVED = 'Approved',
   PENDING = 'Pending',
   REJECTED = 'Rejected',
@@ -559,10 +683,15 @@ export interface ChangePasswordUserInput {
   oldPassword: string;
   newPassword: string;
 }
+export interface UpdateEmailUserInput {
+  email: string;
+}
 
-export interface PasswordChangeResponse {
-  success: boolean;
-  message: string;
+export interface PasswordChangeResponse extends Success {}
+
+export interface EmailChangeResponse extends Success {}
+export interface VerificationEmailUserInput extends Success {
+  email: string;
 }
 
 export interface AuthResponse {
@@ -618,6 +747,10 @@ export interface CreateContactUsInput {
   email: string;
   subject: string;
   description: string;
+}
+
+export interface ExtendedContactUsInput extends CreateContactUsInput {
+  emailTo: string;
 }
 
 export interface CardInput {
@@ -742,8 +875,8 @@ export interface UserAddress {
   shipping_address?: Address;
 }
 export interface GoogleMapLocation {
-  lat?: number;
-  lng?: number;
+  lat?: number | string;
+  lng?: number | string;
   street_number?: string;
   route?: string;
   street_address?: string;
@@ -751,6 +884,13 @@ export interface GoogleMapLocation {
   state?: string;
   country?: string;
   zip?: string;
+  formattedAddress?: string;
+  formatted_address?: string;
+}
+export interface ShopMapLocation {
+  lat?: string;
+  lng?: string;
+  street_address?: string;
   formattedAddress?: string;
 }
 
@@ -781,10 +921,80 @@ export interface StoreNotice {
   creator?: any;
 }
 
-export interface StoreNoticeQueryOptions extends QueryOptions {
-  shop_id: string;
+export interface FAQS {
+  id: string;
+  faq_title: string;
+  faq_description: string;
+  slug: string;
+  faq_type: string;
+  issued_by: string;
+  language: string;
+  shop_id?: Shop;
+  user_id: User;
+  translated_languages: string[];
+  created_at: string;
+  updated_at: string;
 }
 
+export interface TermsAndConditions {
+  id: string;
+  translated_languages: string[];
+  title: string;
+  description: string;
+  shop_id?: string;
+  user_id: string;
+  created_at: string;
+  updated_at: string;
+  deleted_at?: string;
+  is_approved?: boolean;
+  issued_by?: string;
+  type?: string;
+}
+
+export interface StoreNoticeQueryOptions extends QueryOptions {
+  shop_id: string;
+  shops: string;
+}
+
+export interface FlashSale {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  start_date: string;
+  end_date: string;
+  cover_image?: Attachment;
+  image?: Attachment;
+  type: string;
+  rate: string;
+  sale_status: boolean;
+  sale_builder: any;
+  language: string;
+  translated_languages: string[];
+  deleted_at?: string;
+  created_at: string;
+  updated_at: string;
+  products?: Product[];
+}
+
+export interface SingleFlashSale {
+  flash_sale: FlashSale;
+  products: ProductPaginator;
+}
+
+export enum ProductType {
+  Simple = 'simple',
+  Variable = 'variable',
+}
+
+export enum DiscountType {
+  Percentage = 'percentage',
+  FixedRate = 'fixed_rate',
+}
+
+export interface CategoryPaginator extends PaginatorInfo<Category> {}
+
+export interface RefundReasonPaginator extends PaginatorInfo<RefundReason> {}
 export interface ProductPaginator extends PaginatorInfo<Product> {}
 
 export interface CategoryPaginator extends PaginatorInfo<Category> {}
@@ -794,6 +1004,11 @@ export interface ShopPaginator extends PaginatorInfo<Shop> {}
 export interface AuthorPaginator extends PaginatorInfo<Author> {}
 
 export interface ManufacturerPaginator extends PaginatorInfo<Manufacturer> {}
+
+export interface FaqsPaginator extends PaginatorInfo<FAQS> {}
+
+export interface TermsAndConditionsPaginator
+  extends PaginatorInfo<TermsAndConditions> {}
 
 export interface CouponPaginator extends PaginatorInfo<Coupon> {}
 
@@ -807,6 +1022,8 @@ export interface OrderStatusPaginator extends PaginatorInfo<OrderStatus> {}
 
 export interface RefundPaginator extends PaginatorInfo<Refund> {}
 
+export interface RefundPolicyPaginator extends PaginatorInfo<RefundPolicy> {}
+
 export interface ReviewPaginator extends PaginatorInfo<Review> {}
 
 export interface QuestionPaginator extends PaginatorInfo<Question> {}
@@ -817,3 +1034,5 @@ export interface DownloadableFilePaginator
   extends PaginatorInfo<DownloadableFile> {}
 
 export interface WishlistPaginator extends PaginatorInfo<Wishlist> {}
+
+export interface FlashSalePaginator extends PaginatorInfo<FlashSale> {}

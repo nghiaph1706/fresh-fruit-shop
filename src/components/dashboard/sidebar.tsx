@@ -7,6 +7,7 @@ import { useLogout, useUser } from '@/framework/user';
 import { useSettings } from '@/framework/settings';
 import { PaymentGateway } from '@/types';
 import { Routes } from '@/config/routes';
+import { isStripeAvailable } from '@/lib/is-stripe-available';
 
 type DashboardSidebarProps = {
   className?: string;
@@ -18,6 +19,7 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ className }) => {
   const { settings } = useSettings();
   const { t } = useTranslation();
   const { pathname } = useRouter();
+
   return (
     <aside className={className}>
       {/* <div className="mb-5 overflow-hidden rounded border border-border-200 bg-light px-10 py-8">
@@ -46,14 +48,11 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ className }) => {
           {siteSettings.dashboardSidebarMenu
             ?.slice(0, -1)
             .map((item: any, idx) => {
-              // Optimize this
-              if (
-                item?.href === Routes.cards &&
-                !item?.cardsPayment?.includes(
-                  settings?.paymentGateway?.toUpperCase()
-                )
-              )
+              const enableMyCardRoute = isStripeAvailable(settings);
+              if (item?.href === Routes.cards && enableMyCardRoute === false) {
                 return null;
+              }
+
               return (
                 <li className="py-1" key={idx}>
                   <Link

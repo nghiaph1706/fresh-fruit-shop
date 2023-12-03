@@ -23,8 +23,9 @@ const AuthorCard: React.FC<AuthorItemProps> = ({ item }) => (
       <Image
         src={item?.image?.original! ?? avatarPlaceholder}
         alt={item?.name!}
-        layout="fill"
-        objectFit="contain"
+        fill
+        sizes="(max-width: 768px) 100vw"
+        className="object-contain"
       />
     </span>
     <span className="block text-center font-semibold text-heading transition-colors group-hover:text-orange-500">

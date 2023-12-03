@@ -12,7 +12,7 @@ export default function AuthorsPage() {
         <h1 className="mb-4 text-2xl font-bold sm:text-3xl lg:text-4xl text-accent">
           {t('text-search-authors-title')}
         </h1>
-        <p className="text-base text-heading">
+        <p className="text-base text-heading text-center">
           {t('text-search-authors-subtitle')}
         </p>
 
@@ -32,7 +32,7 @@ export default function AuthorsPage() {
 const getLayout = (page: React.ReactElement) =>
   getSiteLayout(
     <div className="w-full bg-light">
-      <div className="min-h-screen px-5 py-10 mx-auto max-w-1920 xl:py-14 xl:px-16">
+      <div className="min-h-screen px-5 pt-10 pb-16 mx-auto max-w-1920 xl:py-14 xl:px-16">
         {page}
       </div>
     </div>

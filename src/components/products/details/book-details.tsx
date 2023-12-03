@@ -20,69 +20,13 @@ import BadgeGroups from './badge-groups';
 import Link from '@/components/ui/link';
 import { displayImage } from '@/lib/display-product-preview-images';
 import { useIntersection } from 'react-use';
-import { HeartOutlineIcon } from '@/components/icons/heart-outline';
-import { HeartFillIcon } from '@/components/icons/heart-fill';
-import Spinner from '@/components/ui/loaders/spinner/spinner';
-import { useUser } from '@/framework/user';
-import { useInWishlist, useToggleWishlist } from '@/framework/wishlist';
-import { useModalAction } from '@/components/ui/modal/modal.context';
-import classNames from 'classnames';
+import dynamic from 'next/dynamic';
+import { AddToCartExternal } from '@/components/products/add-to-cart/add-to-cart-external';
 
-function FavoriteButton({
-  productId,
-  className,
-}: {
-  productId: string;
-  className?: string;
-}) {
-  const { isAuthorized } = useUser();
-  const { toggleWishlist, isLoading: adding } = useToggleWishlist(productId);
-  const { inWishlist, isLoading: checking } = useInWishlist({
-    enabled: isAuthorized,
-    product_id: productId,
-  });
-
-  const { openModal } = useModalAction();
-  function toggle() {
-    if (!isAuthorized) {
-      openModal('LOGIN_VIEW');
-      return;
-    }
-    toggleWishlist({ product_id: productId });
-  }
-  const isLoading = adding || checking;
-  if (isLoading) {
-    return (
-      <div
-        className={classNames(
-          'mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-gray-300',
-          className
-        )}
-      >
-        <Spinner simple={true} className="flex h-5 w-5" />
-      </div>
-    );
-  }
-  return (
-    <button
-      type="button"
-      className={classNames(
-        'mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-gray-300 transition-colors',
-        {
-          '!border-accent': inWishlist,
-        },
-        className
-      )}
-      onClick={toggle}
-    >
-      {inWishlist ? (
-        <HeartFillIcon className="h-5 w-5 text-accent" />
-      ) : (
-        <HeartOutlineIcon className="h-5 w-5 text-accent" />
-      )}
-    </button>
-  );
-}
+const FavoriteButton = dynamic(
+  () => import('@/components/products/details/favorite-button'),
+  { ssr: false }
+);
 
 type Props = {
   product: Product;
@@ -102,7 +46,9 @@ const BookDetails: React.FC<Props> = ({ product, isModal = false }) => {
     author,
     manufacturer,
     tags,
+    video,
     is_digital,
+    is_external,
   } = product ?? {};
 
   const { t } = useTranslation('common');
@@ -158,10 +104,21 @@ const BookDetails: React.FC<Props> = ({ product, isModal = false }) => {
     <article className="mx-auto max-w-screen-xl rounded-lg bg-light px-5 py-16 xl:px-0">
       <div className="flex flex-col border-b border-border-200 border-opacity-70 pb-14 lg:flex-row">
         <div className="lg:w-1/2">
-          <div className="product-gallery h-full bg-gray-100 py-5 md:py-16">
+          <div
+            className={`product-gallery h-full bg-gray-100  ${
+              video?.length
+                ? 'book-product-video pb-6 md:pb-14'
+                : 'py-6 md:py-16'
+            }`}
+          >
             <ThumbsCarousel
               gallery={previewImages}
-              hideThumbs={previewImages.length <= 1}
+              video={video}
+              hideThumbs={
+                previewImages.length && video?.length
+                  ? false
+                  : previewImages.length <= 1
+              }
               aspectRatio="auto"
             />
           </div>
@@ -253,12 +210,21 @@ const BookDetails: React.FC<Props> = ({ product, isModal = false }) => {
 
             <div className="mt-4 flex flex-col items-center border-b border-border-200 border-opacity-70 pb-5 md:mt-6 md:pb-8 lg:flex-row">
               <div className="mb-3 w-full lg:mb-0">
-                <AddToCartAlt
-                  data={product}
-                  variant="bordered"
-                  variation={selectedVariation}
-                  disabled={selectedVariation?.is_disable || !isSelected}
-                />
+                {!is_external ? (
+                  <AddToCartAlt
+                    data={product}
+                    variant="bordered"
+                    variation={selectedVariation}
+                    disabled={selectedVariation?.is_disable || !isSelected}
+                  />
+                ) : (
+                  <AddToCartExternal
+                    data={product}
+                    variant="bordered"
+                    variation={selectedVariation}
+                    disabled={selectedVariation?.is_disable || !isSelected}
+                  />
+                )}
               </div>
             </div>
           </div>

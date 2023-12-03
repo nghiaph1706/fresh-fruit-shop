@@ -1,16 +1,20 @@
 import useLayout from '@/lib/hooks/use-layout';
 import Header from './header';
 import HeaderMinimal from './header-minimal';
-import MobileNavigation from './mobile-navigation';
 import Footer from './footer';
 import NoticeHighlightedBar from '@/components/store-notice/notice-highlightedBar';
 import { useRouter } from 'next/router';
+import dynamic from 'next/dynamic';
+
+const MobileNavigation = dynamic(() => import('./mobile-navigation'), {
+  ssr: false,
+});
 
 export default function SiteLayout({ children }: React.PropsWithChildren<{}>) {
   const { layout } = useLayout();
   const router = useRouter();
   return (
-    <div className="flex flex-col min-h-screen transition-colors duration-150 bg-gray-100">
+    <div className="flex min-h-screen flex-col bg-gray-100 transition-colors duration-150">
       {router.query.slug && <NoticeHighlightedBar />}
 
       {['minimal', 'compact'].includes(layout) ? (

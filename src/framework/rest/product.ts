@@ -5,6 +5,7 @@ import type {
   ProductQueryOptions,
   QuestionPaginator,
   QuestionQueryOptions,
+  BestSellingProductQueryOptions,
   GetParams,
 } from '@/types';
 import {
@@ -89,6 +90,29 @@ export const usePopularProducts = (
   };
 };
 
+export const useBestSellingProducts = (
+  options?: Partial<BestSellingProductQueryOptions>
+) => {
+  const { locale } = useRouter();
+
+  const formattedOptions = {
+    ...options,
+    language: locale,
+  };
+
+  const { data, isLoading, error } = useQuery<Product[], Error>(
+    [API_ENDPOINTS.BEST_SELLING_PRODUCTS, formattedOptions],
+    ({ queryKey }) =>
+      client.products.bestSelling(queryKey[1] as BestSellingProductQueryOptions)
+  );
+
+  return {
+    products: data ?? [],
+    isLoading,
+    error,
+  };
+};
+
 export function useProduct({ slug }: { slug: string }) {
   const { locale: language } = useRouter();
 
@@ -135,7 +159,7 @@ export function useCreateFeedback() {
     client.products.createFeedback,
     {
       onSuccess: (res) => {
-        toast.success(t('text-feedback-submitted'));
+        toast.success(`${t('text-feedback-submitted')}`);
         queryClient.refetchQueries(API_ENDPOINTS.PRODUCTS_QUESTIONS);
         queryClient.refetchQueries(API_ENDPOINTS.PRODUCTS_REVIEWS);
       },
@@ -154,14 +178,14 @@ export function useCreateAbuseReport() {
     client.products.createAbuseReport,
     {
       onSuccess: () => {
-        toast.success(t('text-abuse-report-submitted'));
+        toast.success(`${t('text-abuse-report-submitted')}`);
       },
       onError: (error) => {
         const {
           response: { data },
         }: any = error ?? {};
 
-        toast.error(t(data?.message));
+        toast.error(`${t(data?.message)}`);
       },
       onSettled: () => {
         closeModal();
@@ -182,14 +206,14 @@ export function useCreateQuestion() {
     client.products.createQuestion,
     {
       onSuccess: () => {
-        toast.success(t('text-question-submitted'));
+        toast.success(`${t('text-question-submitted')}`);
       },
       onError: (error) => {
         const {
           response: { data },
         }: any = error ?? {};
 
-        toast.error(t(data?.message));
+        toast.error(`${t(data?.message)}`);
       },
       onSettled: () => {
         queryClient.refetchQueries(API_ENDPOINTS.PRODUCTS_QUESTIONS);

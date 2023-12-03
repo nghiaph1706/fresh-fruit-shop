@@ -33,7 +33,7 @@ const CouponCard: React.FC<CouponCardProps> = ({ coupon, className }) => {
 
   return (
     <div className={cn('coupon-card', className)}>
-      <div className="flex rounded overflow-hidden bg-gray-200 relative">
+      <div className="relative flex overflow-hidden rounded bg-gray-200">
         <Image
           src={image?.thumbnail ?? couponPlaceholder}
           alt={code}
@@ -41,10 +41,10 @@ const CouponCard: React.FC<CouponCardProps> = ({ coupon, className }) => {
           height="429"
         />
       </div>
-      <div className="w-11/12 grid grid-flow-col auto-cols-fr items-center py-4 px-5 mx-auto rounded-bl rounded-be shadow-sm bg-light">
+      <div className="rounded-be mx-auto grid w-11/12 auto-cols-fr grid-flow-col items-center rounded-bl bg-light px-5 py-4 shadow-sm">
         {is_valid ? (
           <>
-            <span className="text-heading font-semibold uppercase focus:outline-none">
+            <span className="font-semibold uppercase text-heading focus:outline-none">
               {copyText.value}
             </span>
 
@@ -58,20 +58,20 @@ const CouponCard: React.FC<CouponCardProps> = ({ coupon, className }) => {
                   }))
                 }
               >
-                <button className="ltr:text-right rtl:text-left text-accent text-sm font-semibold transition-colors duration-200 focus:outline-none hover:text-accent-hover focus:text-accent-hover">
+                <button className="text-sm font-semibold text-accent transition-colors duration-200 hover:text-accent-hover focus:text-accent-hover focus:outline-0 ltr:text-right rtl:text-left">
                   <span>{t('text-copy')}</span>
                 </button>
               </CopyToClipboard>
             )}
 
             {copyText.copied && (
-              <div className="ltr:text-right rtl:text-left text-accent text-sm font-semibold">
+              <div className="text-sm font-semibold text-accent ltr:text-right rtl:text-left">
                 {t('text-copied')}
               </div>
             )}
           </>
         ) : (
-          <span className="text-sm text-center block text-red-500">
+          <span className="block text-center text-sm text-red-500">
             {t('text-expired')}
           </span>
         )}

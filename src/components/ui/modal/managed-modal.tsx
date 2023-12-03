@@ -19,6 +19,10 @@ const CreateOrUpdateAddressForm = dynamic(
   () => import('@/components/address/address-form'),
   { ssr: false }
 );
+const LocationBasedShopForm = dynamic(
+  () => import('@/components/form/location-based-shop-form'),
+  { ssr: false }
+);
 const CreateOrUpdateGuestAddressForm = dynamic(
   () => import('@/components/checkout/create-or-update-guest')
 );
@@ -49,6 +53,10 @@ const PaymentModal = dynamic(
   () => import('@/components/payment/payment-modal'),
   { ssr: false }
 );
+const StripeElementModal = dynamic(
+  () => import('@/components/payment/stripe-element-modal'),
+  { ssr: false }
+);
 const AddNewPaymentModal = dynamic(
   () => import('@/components/payment/add-new-payment-modal'),
   { ssr: false }
@@ -59,12 +67,17 @@ const AddNewCardModal = dynamic(
   { ssr: false }
 );
 
+const GateWayControlModal = dynamic(
+  () => import('@/components/payment/gateway-control/gateway-modal'),
+  { ssr: false }
+);
+
 const ManagedModal = () => {
   const { isOpen, view, data } = useModalState();
   const { closeModal } = useModalAction();
 
   // Controlled payment modal [custom & default]
-  if (view === "PAYMENT_MODAL"){
+  if (view === 'PAYMENT_MODAL') {
     return <PaymentModal />;
   }
 
@@ -79,6 +92,7 @@ const ManagedModal = () => {
       {view === 'ADD_OR_UPDATE_GUEST_ADDRESS' && (
         <CreateOrUpdateGuestAddressForm />
       )}
+      {view === 'LOCATION_BASED_SHOP' && <LocationBasedShopForm />}
       {view === 'ADD_OR_UPDATE_CHECKOUT_CONTACT' && (
         <AddOrUpdateCheckoutContact />
       )}
@@ -108,6 +122,8 @@ const ManagedModal = () => {
       {/* Card/My Card Modal */}
       {view === 'ADD_NEW_CARD' && <AddNewCardModal />}
       {view === 'DELETE_CARD_MODAL' && <DeleteCardModal />}
+      {view === 'GATEWAY_MODAL' && <GateWayControlModal />}
+      {view === 'STRIPE_ELEMENT_MODAL' && <StripeElementModal />}
     </Modal>
   );
 };

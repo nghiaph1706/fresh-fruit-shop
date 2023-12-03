@@ -13,7 +13,7 @@ import { CreateReviewInput } from '@/types';
 
 const reviewFormSchema = yup.object().shape({
   rating: yup.number().required('error-rating-required'),
-  comment: yup.string(),
+  comment: yup.string().required('error-comment-required'),
   photos: yup.array(),
 });
 
@@ -70,7 +70,12 @@ export default function ReviewForm() {
         </div>
       </div>
       <div className="p-7">
-        <Form<Omit<CreateReviewInput, 'product_id' | 'shop_id' | 'variation_option_id' | 'order_id'>>
+        <Form<
+          Omit<
+            CreateReviewInput,
+            'product_id' | 'shop_id' | 'variation_option_id' | 'order_id'
+          >
+        >
           onSubmit={onSubmit}
           validationSchema={reviewFormSchema}
           useFormProps={{

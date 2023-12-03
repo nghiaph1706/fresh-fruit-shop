@@ -2,6 +2,8 @@ export const Bookshelf: React.FC<React.SVGAttributes<{}>> = (props) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
+      width="48.75"
+      height="60"
       viewBox="0 0 48.75 60"
       fill="currentColor"
       {...props}

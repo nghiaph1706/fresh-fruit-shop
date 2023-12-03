@@ -1,4 +1,4 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import MobileOtpInput from 'react-otp-input';
 import Button from '@/components/ui/button';
 import Input from '@/components/ui/forms/input';
@@ -36,7 +36,7 @@ export default function OtpRegisterForm({
   const { closeModal } = useModalAction();
 
   return (
-    <div className="p-5 space-y-5 border border-gray-200 rounded">
+    <div className="space-y-5 rounded border border-gray-200 p-5">
       <Form<OtpRegisterFormValues>
         onSubmit={onSubmit}
         validationSchema={otpLoginFormSchemaForNewUser}
@@ -72,7 +72,7 @@ export default function OtpRegisterForm({
                       <span className="hidden sm:inline-block">-</span>
                     }
                     containerStyle="flex items-center justify-between -mx-2"
-                    inputStyle="flex items-center justify-center !w-full mx-2 sm:!w-9 !px-0 appearance-none transition duration-300 ease-in-out text-heading text-sm focus:outline-none focus:ring-0 border border-border-base rounded focus:border-accent h-12"
+                    inputStyle="flex items-center justify-center !w-full mx-2 sm:!w-9 !px-0 appearance-none transition duration-300 ease-in-out text-heading text-sm focus:outline-0 focus:ring-0 border border-border-base rounded focus:border-accent h-12"
                     disabledStyle="!bg-gray-100"
                   />
                 )}

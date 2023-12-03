@@ -15,7 +15,7 @@ const useLayout = () => {
       page: homePage,
     };
   }
-  const page = data?.types?.find((type) => router.asPath.includes(type.slug));
+  const page = data?.types?.find((type) => router.asPath.includes(type?.slug!));
   return {
     layout: page?.settings?.layoutType ?? 'default',
     page,

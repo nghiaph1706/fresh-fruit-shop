@@ -3,6 +3,7 @@ import React, { useCallback } from 'react';
 interface Props {
   values: string[];
   onChange: (value: string[]) => void;
+  children?: React.ReactNode;
 }
 interface EnrichedChildren {
   onChange(e: React.ChangeEvent<HTMLInputElement>): void;

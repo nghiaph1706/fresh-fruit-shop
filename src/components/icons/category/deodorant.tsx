@@ -3,6 +3,8 @@ export const Deodorant: React.FC<React.SVGAttributes<{}>> = (props) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
+      width="17.564"
+      height="18"
       viewBox="0 0 17.564 18"
       fill="currentColor"
       {...props}

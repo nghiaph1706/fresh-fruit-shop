@@ -12,6 +12,7 @@ interface Item {
   quantity?: number;
   [key: string]: unknown;
   language: string;
+  in_flash_sale: boolean;
 }
 interface Variation {
   id: string | number;
@@ -32,7 +33,8 @@ export function generateCartItem(item: Item, variation: Variation) {
     quantity,
     unit,
     is_digital,
-    language
+    language,
+    in_flash_sale,
   } = item;
   if (!isEmpty(variation)) {
     return {
@@ -48,7 +50,8 @@ export function generateCartItem(item: Item, variation: Variation) {
       ),
       image: image?.thumbnail,
       variationId: variation.id,
-      language
+      language,
+      in_flash_sale,
     };
   }
   return {
@@ -60,6 +63,7 @@ export function generateCartItem(item: Item, variation: Variation) {
     image: image?.thumbnail,
     stock: quantity,
     price: Number(sale_price ? sale_price : price),
-    language
+    language,
+    in_flash_sale,
   };
 }

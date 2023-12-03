@@ -7,9 +7,12 @@ import usePrice from '@/lib/use-price';
 import Link from '@/components/ui/link';
 import { Routes } from '@/config/routes';
 import { Table } from '@/components/ui/table';
+import { OrderStatus } from '@/types';
+import StatusColor from '@/components/orders/status-color';
 
 interface SuborderItemsProps {
   items: any;
+  orderStatus: OrderStatus;
 }
 
 const SuborderItems: React.FC<SuborderItemsProps> = ({ items }) => {
@@ -32,14 +35,15 @@ const SuborderItems: React.FC<SuborderItemsProps> = ({ items }) => {
     },
     {
       title: t('text-status'),
-      dataIndex: 'status',
-      key: 'status',
+      dataIndex: 'order_status',
+      key: 'order_status',
       align: alignLeft,
-      render: function renderStatus(status: any) {
+      render: function renderStatus(order_status: any) {
         return (
           <Badge
-            text={status?.name}
-            style={{ backgroundColor: status?.color }}
+            text={order_status}
+            color={StatusColor(order_status)}
+            // style={{ backgroundColor: order_status?.color }}
           />
         );
       },

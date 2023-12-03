@@ -36,7 +36,9 @@ export const siteSettings = {
     { href: Routes.orders, label: 'auth-menu-my-orders' },
     // { href: Routes.cards, label: 'profile-sidebar-my-cards' },
     { href: Routes.wishlists, label: 'profile-sidebar-my-wishlist' },
+    { href: Routes.questions, label: 'profile-sidebar-my-questions' },
     { href: Routes.refunds, label: 'text-my-refunds' },
+    { href: Routes.reports, label: 'profile-sidebar-my-reports' },
     { href: Routes.checkout, label: 'auth-menu-checkout' },
     { href: Routes.changePassword, label: 'profile-sidebar-password' },
   ],
@@ -61,18 +63,18 @@ export const siteSettings = {
       href: Routes.wishlists,
       label: 'profile-sidebar-my-wishlist',
     },
-    {
-      href: Routes.questions,
-      label: 'profile-sidebar-my-questions',
-    },
+    // {
+    //   href: Routes.questions,
+    //   label: 'profile-sidebar-my-questions',
+    // },
     {
       href: Routes.refunds,
       label: 'text-my-refunds',
     },
-    {
-      href: Routes.reports,
-      label: 'profile-sidebar-my-reports',
-    },
+    // {
+    //   href: Routes.reports,
+    //   label: 'profile-sidebar-my-reports',
+    // },
     // {
     //   href: Routes.cards,
     //   label: 'profile-sidebar-my-cards',
@@ -99,33 +101,48 @@ export const siteSettings = {
     play_store_link: '/',
     app_store_link: '/',
   },
-  footer: {
-    copyright: {
-      name: 'RedQ, Inc',
-      href: 'https://redq.io/',
+  headerLinks: [
+    { href: Routes.shops, icon: null, label: 'nav-menu-shops' },
+    { href: Routes.coupons, icon: null, label: 'nav-menu-offer' },
+    { href: Routes.contactUs, label: 'nav-menu-contact' },
+    { href: Routes.help, label: 'nav-menu-faq' },
+    { href: Routes.customerRefundPolicies, label: 'nav-menu-refund-policy' },
+    { href: Routes.terms, label: 'nav-menu-terms' },
+    { href: Routes.flashSale, label: 'nav-menu-flash-sale' },
+    { href: Routes.manufacturers, label: 'text-manufacturers' },
+    { href: Routes.authors, label: 'text-authors' },
+    {
+      href: Routes.vendorRefundPolicies,
+      label: 'nav-menu-vendor-refund-policy',
     },
-    address: '2429 River Drive, Suite 35 Cottonhall, CA 2296 United Kingdom',
-    email: 'dummy@dummy.com',
-    phone: '+1 256-698-0694',
+  ],
+  footer: {
+    // copyright: {
+    //   name: 'RedQ, Inc',
+    //   href: 'https://redq.io/',
+    // },
+    // address: '2429 River Drive, Suite 35 Cottonhall, CA 2296 United Kingdom',
+    // email: 'dummy@dummy.com',
+    // phone: '+1 256-698-0694',
     menus: [
       {
         title: 'text-explore',
         links: [
           {
-            name: 'text-about-us',
-            href: '/',
+            name: 'Shops',
+            href: Routes.shops,
           },
           {
-            name: 'text-sitemap',
-            href: '/',
+            name: 'Authors',
+            href: Routes.authors,
           },
           {
-            name: 'text-bookmarks',
-            href: '/',
+            name: 'Flash Deals',
+            href: Routes?.flashSale,
           },
           {
-            name: 'text-sign-join',
-            href: '/',
+            name: 'Coupon',
+            href: Routes.coupons,
           },
         ],
       },
@@ -137,20 +154,12 @@ export const siteSettings = {
             href: Routes.help,
           },
           {
-            name: 'text-returns',
-            href: '/',
+            name: 'Vendor Refund Policies',
+            href: Routes.vendorRefundPolicies,
           },
           {
-            name: 'text-accessibility',
-            href: '/',
-          },
-          {
-            name: 'text-contact-us',
-            href: Routes.contactUs,
-          },
-          {
-            name: 'text-store-pickup',
-            href: '/',
+            name: 'Customer Refund Policies',
+            href: Routes.customerRefundPolicies,
           },
         ],
       },
@@ -158,7 +167,11 @@ export const siteSettings = {
         title: 'text-our-information',
         links: [
           {
-            name: 'text-privacy-update',
+            name: 'Manufacturers',
+            href: Routes?.manufacturers,
+          },
+          {
+            name: 'Privacy policies',
             href: Routes.privacy,
           },
           {
@@ -166,37 +179,33 @@ export const siteSettings = {
             href: Routes.terms,
           },
           {
-            name: 'text-return-policy',
-            href: '/',
-          },
-          {
-            name: 'text-sitemap',
-            href: '/',
+            name: 'text-contact-us',
+            href: Routes.contactUs,
           },
         ],
       },
     ],
-    payment_methods: [
-      {
-        img: '/payment/master.png',
-        url: '/',
-      },
-      {
-        img: '/payment/skrill.png',
-        url: '/',
-      },
-      {
-        img: '/payment/paypal.png',
-        url: '/',
-      },
-      {
-        img: '/payment/visa.png',
-        url: '/',
-      },
-      {
-        img: '/payment/discover.png',
-        url: '/',
-      },
-    ],
+    // payment_methods: [
+    //   {
+    //     img: '/payment/master.png',
+    //     url: '/',
+    //   },
+    //   {
+    //     img: '/payment/skrill.png',
+    //     url: '/',
+    //   },
+    //   {
+    //     img: '/payment/paypal.png',
+    //     url: '/',
+    //   },
+    //   {
+    //     img: '/payment/visa.png',
+    //     url: '/',
+    //   },
+    //   {
+    //     img: '/payment/discover.png',
+    //     url: '/',
+    //   },
+    // ],
   },
 };

@@ -15,6 +15,7 @@ import type { Product } from '@/types';
 import { isVariationSelected } from '@/lib/is-variation-selected';
 import { useMemo } from 'react';
 import { useAttributes } from './attributes.context';
+import { twMerge } from 'tailwind-merge';
 
 interface ShortDetailsProps {
   product: Product;
@@ -27,8 +28,16 @@ const ShortDetails: React.FC<ShortDetailsProps> = ({ product, isSticky }) => {
   const { closeModal } = useModalAction();
   const { attributes } = useAttributes();
 
-  const { name, slug, image, unit, quantity, min_price, max_price } =
-    product ?? {};
+  const {
+    name,
+    slug,
+    image,
+    unit,
+    quantity,
+    min_price,
+    max_price,
+    product_type,
+  } = product ?? {};
 
   const navigate = (path: string) => {
     router.push(path);
@@ -41,8 +50,10 @@ const ShortDetails: React.FC<ShortDetailsProps> = ({ product, isSticky }) => {
   });
 
   const variations = useMemo(
-    () => getVariations(product?.variations),
-    [product?.variations]
+    () =>
+      product_type?.toLowerCase() === 'variable' &&
+      getVariations(product?.variations),
+    [product?.variations, product_type]
   );
 
   const isSelected = isVariationSelected(variations, attributes);
@@ -56,15 +67,18 @@ const ShortDetails: React.FC<ShortDetailsProps> = ({ product, isSticky }) => {
       )
     );
   }
-  const hasVariations = !isEmpty(variations);
+  const hasVariations =
+    !isEmpty(variations) && product_type?.toLowerCase() === 'variable';
   return (
     <div
-      className={cn(
-        'fixed top-0 left-1/2 z-50 hidden h-auto w-full max-w-6xl -translate-x-1/2 transform bg-light px-8 py-6 shadow transition-all duration-300 md:block',
-        {
-          'invisible -translate-y-1/2 opacity-0': !isSticky,
-          'visible translate-y-0 opacity-100': isSticky,
-        }
+      className={twMerge(
+        cn(
+          'top-0 left-0 z-50 hidden h-auto w-full max-w-6xl bg-light px-8 py-6 shadow transition-all duration-300 md:block',
+          {
+            'invisible -translate-y-1/2 opacity-0 md:hidden': !isSticky,
+            'visible sticky translate-y-0 opacity-100': isSticky,
+          }
+        )
       )}
     >
       <div className="flex items-center">
@@ -80,9 +94,9 @@ const ShortDetails: React.FC<ShortDetailsProps> = ({ product, isSticky }) => {
           <Image
             src={selectedVariation?.image?.original! ?? image?.original}
             alt={name}
-            layout="fill"
-            objectFit="contain"
-            className="product-image"
+            fill
+            sizes="(max-width: 768px) 100vw"
+            className="product-image object-contain"
           />
         </div>
 
@@ -133,13 +147,17 @@ const ShortDetails: React.FC<ShortDetailsProps> = ({ product, isSticky }) => {
           )}
 
           <div className="w-full">
-            <div
-              className={cn('flex flex-col justify-center overflow-y-auto', {
-                'h-[140px]': hasVariations,
-              })}
-            >
-              <VariationGroups variations={variations} />
-            </div>
+            {hasVariations ? (
+              <div
+                className={cn('flex flex-col justify-center overflow-y-auto', {
+                  'h-[140px]': hasVariations,
+                })}
+              >
+                <VariationGroups variations={variations} />
+              </div>
+            ) : (
+              ''
+            )}
 
             <div className={cn({ 'mt-4': hasVariations })}>
               {quantity! > 0 ? (

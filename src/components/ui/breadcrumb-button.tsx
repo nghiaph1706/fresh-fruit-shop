@@ -24,12 +24,11 @@ const BreadcrumbButton: React.FC<BreadcrumbButtonProps> = ({
   >
     <span className="whitespace-nowrap">{text}</span>
     {image && (
-      <span className="absolute bottom-0 h-full overflow-hidden rounded-lg w-14 ltr:right-0 ltr:rounded-l-none rtl:left-0 rtl:rounded-r-none">
+      <span className="absolute bottom-0 h-full w-14 overflow-hidden rounded-lg ltr:right-0 ltr:rounded-l-none rtl:left-0 rtl:rounded-r-none">
         <Image
-          className="w-full h-full"
+          className="h-full w-full"
           src={image ?? productPlaceholder}
           alt={text ?? ''}
-          layout="responsive"
           width={60}
           height={60}
         />

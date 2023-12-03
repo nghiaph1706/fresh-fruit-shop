@@ -16,6 +16,7 @@ export default function OrderPage() {
   const { order, isLoading, isFetching } = useOrder({
     tracking_number: query.tracking_number!.toString(),
   });
+
   // @ts-ignore
   const { payment_status, payment_intent, tracking_number } = order ?? {};
   const isPaymentModalEnabled =

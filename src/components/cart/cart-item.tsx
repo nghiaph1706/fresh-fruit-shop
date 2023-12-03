@@ -14,8 +14,14 @@ interface CartItemProps {
 
 const CartItem = ({ item }: CartItemProps) => {
   const { t } = useTranslation('common');
-  const { isInStock, clearItemFromCart, addItemToCart, removeItemFromCart, updateCartLanguage, language } =
-    useCart();
+  const {
+    isInStock,
+    clearItemFromCart,
+    addItemToCart,
+    removeItemFromCart,
+    updateCartLanguage,
+    language,
+  } = useCart();
 
   const { price } = usePrice({
     amount: item.price,
@@ -26,7 +32,7 @@ const CartItem = ({ item }: CartItemProps) => {
   function handleIncrement(e: any) {
     e.stopPropagation();
     // Check language and update
-    if (item?.language !== language){
+    if (item?.language !== language) {
       updateCartLanguage(item?.language);
     }
     addItemToCart(item, 1);
@@ -43,7 +49,7 @@ const CartItem = ({ item }: CartItemProps) => {
       animate="to"
       exit="from"
       variants={fadeInOut(0.25)}
-      className="flex items-center border-b border-solid border-border-200 border-opacity-75 py-4 px-4 text-sm sm:px-6"
+      className="flex items-center border-b border-solid border-border-200 border-opacity-75 px-4 py-4 text-sm sm:px-6"
     >
       <div className="flex-shrink-0">
         <Counter
@@ -59,8 +65,9 @@ const CartItem = ({ item }: CartItemProps) => {
         <Image
           src={item?.image ?? siteSettings?.product?.placeholderImage}
           alt={item.name}
-          layout="fill"
-          objectFit="contain"
+          fill
+          sizes="(max-width: 768px) 100vw"
+          className="object-contain"
         />
       </div>
       <div>
@@ -75,7 +82,7 @@ const CartItem = ({ item }: CartItemProps) => {
         {itemPrice}
       </span>
       <button
-        className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-muted transition-all duration-200 hover:bg-gray-100 hover:text-red-600 focus:bg-gray-100 focus:text-red-600 focus:outline-none ltr:ml-3 ltr:-mr-2 rtl:mr-3 rtl:-ml-2"
+        className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-muted transition-all duration-200 hover:bg-gray-100 hover:text-red-600 focus:bg-gray-100 focus:text-red-600 focus:outline-0 ltr:ml-3 ltr:-mr-2 rtl:mr-3 rtl:-ml-2"
         onClick={() => clearItemFromCart(item.id)}
       >
         <span className="sr-only">{t('text-close')}</span>

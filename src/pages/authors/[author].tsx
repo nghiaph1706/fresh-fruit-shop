@@ -3,7 +3,7 @@ import Details from '@/components/author/details/details';
 import { useWindowSize } from '@/lib/use-window-size';
 import dynamic from 'next/dynamic';
 import ProductsGrid from '@/components/products/grid';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 export { getStaticPaths, getStaticProps } from '@/framework/author.ssr';
 
 const CartCounterButton = dynamic(
@@ -35,7 +35,7 @@ export default function Author({ author, variables }: any) {
 const getLayout = (page: React.ReactElement) =>
   getSiteLayout(
     <div className="w-full bg-light">
-      <div className="mx-auto min-h-screen w-full max-w-1920 px-5 py-10 xl:py-14 xl:px-16">
+      <div className="mx-auto min-h-screen w-full max-w-1920 px-5 pt-10 pb-16 xl:py-14 xl:px-16">
         {page}
       </div>
     </div>

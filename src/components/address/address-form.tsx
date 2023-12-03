@@ -99,6 +99,8 @@ export const AddressForm: React.FC<any> = ({
                   name="location"
                   render={({ field: { onChange } }) => (
                     <GooglePlacesAutocomplete
+                      register={register}
+                      // @ts-ignore
                       onChange={(location: any) => {
                         onChange(location);
                         setValue('address.country', location?.country);

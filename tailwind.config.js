@@ -42,6 +42,8 @@ module.exports = {
         light: withOpacity('--color-light'),
         dark: withOpacity('--color-dark'),
         accent: withOpacity('--color-accent'),
+        'muted-black': withOpacity('--color-muted-black'),
+        'base-dark': withOpacity('--text-base-dark'),
         'accent-hover': withOpacity('--color-accent-hover'),
         'accent-200': withOpacity('--color-accent-200'),
         'accent-300': withOpacity('--color-accent-300'),
@@ -82,6 +84,14 @@ module.exports = {
           youtube: '#ff0000',
           google: '#4285f4',
           'google-hover': '#3574de',
+        },
+        status: {
+          pending: withOpacity('--color-pending'),
+          processing: withOpacity('--color-processing'),
+          complete: withOpacity('--color-complete'),
+          canceled: withOpacity('--color-canceled'),
+          failed: withOpacity('--color-failed'),
+          'out-for-delivery': withOpacity('--color-out-for-delivery'),
         },
       },
       textColor: {

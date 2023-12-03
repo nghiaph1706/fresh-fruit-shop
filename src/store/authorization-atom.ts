@@ -8,3 +8,4 @@ export function checkIsLoggedIn() {
   return true;
 }
 export const authorizationAtom = atom(checkIsLoggedIn());
+

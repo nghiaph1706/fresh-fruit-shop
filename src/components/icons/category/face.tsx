@@ -3,7 +3,8 @@ export const Face: React.FC<React.SVGAttributes<{}>> = (props) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 15.267 18"
+      width="15.267"
+      height="18"
       fill="currentColor"
       {...props}
     >

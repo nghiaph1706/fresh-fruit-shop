@@ -3,7 +3,8 @@ export const Purse: React.FC<React.SVGAttributes<{}>> = (props) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 18 18"
+      width="18"
+      height="16.605"
       fill="currentColor"
       {...props}
     >

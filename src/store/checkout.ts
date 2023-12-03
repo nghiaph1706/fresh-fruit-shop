@@ -21,6 +21,7 @@ interface CheckoutState {
   billing_address: Address | null;
   shipping_address: Address | null;
   payment_gateway: PaymentGateway;
+  payment_sub_gateway: string;
   delivery_time: DeliveryTime | null;
   customer_contact: string;
   customer_name: string | null;
@@ -28,7 +29,7 @@ interface CheckoutState {
   coupon: Coupon | null;
   payable_amount: number;
   use_wallet: boolean;
-
+  note?: string;
   [key: string]: unknown;
 }
 
@@ -37,10 +38,12 @@ export const defaultCheckout: CheckoutState = {
   shipping_address: null,
   delivery_time: null,
   payment_gateway: PaymentGateway.COD,
+  payment_sub_gateway: '',
   customer_contact: '',
   customer_name: '',
   verified_response: null,
   coupon: null,
+  note: '',
   payable_amount: 0,
   use_wallet: false,
 };
@@ -78,6 +81,15 @@ export const paymentGatewayAtom = atom(
     return set(checkoutAtom, { ...prev, payment_gateway: data });
   }
 );
+
+export const paymentSubGatewayAtom = atom(
+  (get) => get(checkoutAtom).payment_sub_gateway,
+  (get, set, data: string) => {
+    const prev = get(checkoutAtom);
+    return set(checkoutAtom, { ...prev, payment_sub_gateway: data });
+  }
+);
+
 export const verifiedTokenAtom = atom(
   (get) => get(checkoutAtom).token,
   (get, set, data: string) => {
@@ -97,6 +109,13 @@ export const guestNameAtom = atom(
   (get, set, data: string) => {
     const prev = get(checkoutAtom);
     return set(checkoutAtom, { ...prev, customer_name: data });
+  }
+);
+export const orderNoteAtom = atom(
+  (get) => get(checkoutAtom).note,
+  (get, set, data: string) => {
+    const prev = get(checkoutAtom);
+    return set(checkoutAtom, { ...prev, note: data });
   }
 );
 export const verifiedResponseAtom = atom(

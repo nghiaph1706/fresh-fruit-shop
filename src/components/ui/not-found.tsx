@@ -8,7 +8,7 @@ interface Props {
 }
 
 const NotFound: React.FC<Props> = ({ className, text }) => {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation();
   return (
     <div className={cn('flex flex-col items-center', className)}>
       <div className="w-full h-full flex items-center justify-center">

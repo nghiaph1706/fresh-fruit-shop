@@ -3,7 +3,7 @@ import { useState, useEffect, useMemo } from 'react';
 import Checkbox from '@/components/ui/forms/checkbox/checkbox';
 import { useRouter } from 'next/router';
 import Scrollbar from '@/components/ui/scrollbar';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import { useCategories } from '@/framework/category';
 import ErrorMessage from '@/components/ui/error-message';
 import Spinner from '@/components/ui/loaders/spinner/spinner';
@@ -64,7 +64,7 @@ const CategoryFilter: React.FC<{ type?: any }> = ({ type }) => {
   // @ts-ignore
   const { categories, isLoading, error } = useCategories({
     ...(type ? { type } : { type: query.searchType }),
-    limit: 1000
+    limit: 1000,
   });
 
   if (error) return <ErrorMessage message={error.message} />;

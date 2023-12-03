@@ -12,7 +12,8 @@ import { useModalAction } from '@/components/ui/modal/modal.context';
 import { PaymentGateway, PaymentIntentInfo } from '@/types';
 import StripeBaseForm from '@/components/payment/stripe/stripe-base-form';
 import getStripe from '@/lib/get-stripejs';
-
+import StripeElementForm from '@/components/payment/stripe/stripe-element-base-form';
+import { StripeElementsOptions } from '@stripe/stripe-js';
 interface Props {
   paymentIntentInfo: PaymentIntentInfo;
   trackingNumber: string;
@@ -62,6 +63,7 @@ const PaymentForm: React.FC<Props> = ({
             payment_intent: paymentIntentInfo?.payment_id as string,
             save_card: saveCard as boolean,
             tracking_number: trackingNumber as string,
+            payment_gateway: 'stripe' as string,
           },
           {
             onSuccess: async (payload: any) => {
@@ -75,8 +77,10 @@ const PaymentForm: React.FC<Props> = ({
               // Send card response to the api\
               await createOrderPayment({
                 tracking_number: trackingNumber as string,
+                payment_gateway: 'stripe' as string,
               });
               if (confirmCardPayment?.paymentIntent?.status === 'succeeded') {
+                //@ts-ignore
                 toast.success(t('payment-successful'));
                 setLoading(false);
                 closeModal();
@@ -100,8 +104,10 @@ const PaymentForm: React.FC<Props> = ({
       // Send card response to the api
       await createOrderPayment({
         tracking_number: trackingNumber,
+        payment_gateway: 'stripe' as string,
       });
       if (confirmCardPayment?.paymentIntent?.status === 'succeeded') {
+        //@ts-ignore
         toast.success(t('payment-successful'));
         setLoading(false);
         closeModal();
@@ -133,14 +139,27 @@ const StripePaymentForm: React.FC<Props> = ({
   paymentIntentInfo,
   trackingNumber,
 }) => {
+  let onlyCard = false; // eita ashbe settings theke
+
+  const clientSecret = paymentIntentInfo?.client_secret;
+
+  const options: StripeElementsOptions = {
+    clientSecret,
+    appearance: {
+      theme: "stripe",
+    },
+  };
+
   return (
-    <Elements stripe={getStripe()}>
-      <PaymentForm
-        paymentIntentInfo={paymentIntentInfo}
-        trackingNumber={trackingNumber}
-        paymentGateway={paymentGateway}
-      />
-    </Elements>
+    <>
+      <Elements stripe={getStripe()}>
+        <PaymentForm
+          paymentIntentInfo={paymentIntentInfo}
+          trackingNumber={trackingNumber}
+          paymentGateway={paymentGateway}
+        />
+      </Elements>
+    </>
   );
 };
 

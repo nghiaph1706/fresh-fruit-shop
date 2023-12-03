@@ -2,6 +2,8 @@ export const CenterTable: React.FC<React.SVGAttributes<{}>> = (props) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
+      width="60"
+      height="48.75"
       viewBox="0 0 60 48.75"
       fill="currentColor"
       {...props}

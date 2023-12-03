@@ -30,7 +30,9 @@ export const useCart = () => {
   return React.useMemo(() => context, [context]);
 };
 
-export const CartProvider: React.FC = (props) => {
+export const CartProvider: React.FC<{ children?: React.ReactNode }> = (
+  props
+) => {
   const [savedCart, saveCart] = useLocalStorage(
     CART_KEY,
     JSON.stringify(initialState)
@@ -82,7 +84,7 @@ export const CartProvider: React.FC = (props) => {
       isInCart,
       isInStock,
       resetCart,
-      updateCartLanguage
+      updateCartLanguage,
     }),
     [getItemFromCart, isInCart, isInStock, state]
   );

@@ -17,6 +17,7 @@ interface Props {
 const RazorpayPaymentModal: React.FC<Props> = ({
   trackingNumber,
   paymentIntentInfo,
+  paymentGateway,
 }) => {
   const { t } = useTranslation();
   const { closeModal } = useModalAction();
@@ -28,7 +29,8 @@ const RazorpayPaymentModal: React.FC<Props> = ({
   const { createOrderPayment } = useOrderPayment();
 
   // @ts-ignore
-  const { customer_name, customer_contact, customer, billing_address } = order ?? {};
+  const { customer_name, customer_contact, customer, billing_address } =
+    order ?? {};
 
   const paymentHandle = useCallback(async () => {
     if (!checkScriptLoaded()) {
@@ -44,7 +46,10 @@ const RazorpayPaymentModal: React.FC<Props> = ({
       order_id: paymentIntentInfo?.payment_id!,
       handler: async () => {
         closeModal();
-        createOrderPayment({ tracking_number: trackingNumber! });
+        createOrderPayment({
+          tracking_number: trackingNumber!,
+          payment_gateway: 'razorpay' as string,
+        });
       },
       prefill: {
         ...(customer_name && { name: customer_name }),

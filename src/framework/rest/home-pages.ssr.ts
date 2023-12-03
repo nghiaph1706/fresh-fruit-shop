@@ -4,6 +4,7 @@ import type {
   PopularProductQueryOptions,
   SettingsQueryOptions,
   TypeQueryOptions,
+  BestSellingProductQueryOptions,
 } from '@/types';
 import type { GetStaticPaths, GetStaticProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -72,7 +73,7 @@ export const getStaticProps: GetStaticProps<
   }
 
   await queryClient.prefetchQuery(
-    [API_ENDPOINTS.TYPES, {slug: pageType, language: locale}],
+    [API_ENDPOINTS.TYPES, { slug: pageType, language: locale }],
     ({ queryKey }: any) => client.types.get(queryKey[1])
   );
   const productVariables = {
@@ -80,7 +81,10 @@ export const getStaticProps: GetStaticProps<
     limit: PRODUCTS_PER_PAGE,
   };
   await queryClient.prefetchInfiniteQuery(
-    [API_ENDPOINTS.PRODUCTS, { limit: PRODUCTS_PER_PAGE, type: pageType, language: locale }],
+    [
+      API_ENDPOINTS.PRODUCTS,
+      { limit: PRODUCTS_PER_PAGE, type: pageType, language: locale },
+    ],
     ({ queryKey }) => client.products.all(queryKey[1] as any)
   );
 
@@ -88,7 +92,7 @@ export const getStaticProps: GetStaticProps<
     type_slug: pageType,
     limit: 10,
     with: 'type;author',
-    language: locale
+    language: locale,
   };
 
   // Only prefetch popular products for `book` demo
@@ -97,6 +101,14 @@ export const getStaticProps: GetStaticProps<
       [API_ENDPOINTS.PRODUCTS_POPULAR, popularProductVariables],
       ({ queryKey }) =>
         client.products.popular(queryKey[1] as PopularProductQueryOptions)
+    );
+
+    await queryClient.prefetchQuery(
+      [API_ENDPOINTS.BEST_SELLING_PRODUCTS, popularProductVariables],
+      ({ queryKey }) =>
+        client.products.bestSelling(
+          queryKey[1] as BestSellingProductQueryOptions
+        )
     );
   }
 
@@ -120,6 +132,7 @@ export const getStaticProps: GetStaticProps<
         popularProducts: popularProductVariables,
         products: productVariables,
         categories: categoryVariables,
+        bestSellingProducts: popularProductVariables,
         types: {
           type: pageType,
         },

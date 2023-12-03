@@ -16,7 +16,7 @@ const MultiRangeSlider: React.FC<Props> = ({ min, max, onChange }) => {
 
   // Convert to percentage
   const getPercent = useCallback(
-    (value) => Math.round(((value - min) / (max - min)) * 100),
+    (value: number) => Math.round(((value - min) / (max - min)) * 100),
     [min, max]
   );
 
@@ -65,7 +65,7 @@ const MultiRangeSlider: React.FC<Props> = ({ min, max, onChange }) => {
             event.target.value = value.toString();
           }}
           className={classnames(
-            'thumb absolute h-0 w-full outline-none z-[3]',
+            'thumb absolute z-[3] h-0 w-full outline-none',
             {
               'z-[5]': minVal > max - 100,
             }
@@ -82,23 +82,23 @@ const MultiRangeSlider: React.FC<Props> = ({ min, max, onChange }) => {
             setMaxVal(value);
             event.target.value = value.toString();
           }}
-          className="thumb absolute h-0 w-full outline-none z-[4]"
+          className="thumb absolute z-[4] h-0 w-full outline-none"
         />
         <div className="relative w-full">
-          <div className="track absolute h-1 rounded bg-gray-200 w-full z-[1]" />
+          <div className="track absolute z-[1] h-1 w-full rounded bg-gray-200" />
           <div
             ref={range}
-            className="range absolute h-1 rounded bg-accent z-[2]"
+            className="range absolute z-[2] h-1 rounded bg-accent"
           />
         </div>
       </div>
 
       <div className="grid grid-cols-2 gap-3 mt-4">
-        <div className="flex flex-col items-start p-2 rounded border border-gray-200">
+        <div className="flex flex-col items-start p-2 border border-gray-200 rounded">
           <label className="text-sm font-semibold text-gray-400">Min</label>
           <span className="text-sm font-bold text-heading">{minVal}</span>
         </div>
-        <div className="flex flex-col items-end p-2 rounded border border-gray-200">
+        <div className="flex flex-col items-end p-2 border border-gray-200 rounded">
           <label className="text-sm font-semibold text-gray-400">Max</label>
           <span className="text-sm font-bold text-heading">{maxVal}</span>
         </div>

@@ -86,8 +86,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
               alt={user.name ?? ''}
               width={80}
               height={80}
-              objectFit="contain"
-              className="inline-flex rounded-md bg-gray-200"
+              className="inline-flex rounded-md bg-gray-200 object-contain"
             />
           </div>
         ))}
@@ -150,7 +149,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
                     <button
                       onClick={openAbuseReportModal}
                       className={cn(
-                        'flex w-full items-center space-x-4 px-5 py-2.5 text-sm font-semibold capitalize transition duration-200 hover:text-accent focus:outline-none rtl:space-x-reverse',
+                        'flex w-full items-center space-x-4 px-5 py-2.5 text-sm font-semibold capitalize transition duration-200 hover:text-accent focus:outline-0 rtl:space-x-reverse',
                         active ? 'text-accent' : 'text-body'
                       )}
                     >

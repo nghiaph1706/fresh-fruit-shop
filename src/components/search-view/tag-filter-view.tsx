@@ -3,7 +3,7 @@ import { useState, useEffect, useMemo } from 'react';
 import Checkbox from '@/components/ui/forms/checkbox/checkbox';
 import { useRouter } from 'next/router';
 import Scrollbar from '@/components/ui/scrollbar';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import ErrorMessage from '@/components/ui/error-message';
 import { useTags } from '@/framework/tag';
 import Spinner from '@/components/ui/loaders/spinner/spinner';
@@ -59,12 +59,12 @@ const TagFilterView = ({ tags }: Props) => {
 
 const TagFilter = () => {
   const { tags, isLoading, error } = useTags({ limit: 100 });
-  let err:any = error;
+  let err: any = error;
   if (err) return <ErrorMessage message={err?.message} />;
   if (isLoading)
     return (
-      <div className="flex items-center justify-center w-full py-5">
-        <Spinner className="w-6 h-6" simple={true} />
+      <div className="flex w-full items-center justify-center py-5">
+        <Spinner className="h-6 w-6" simple={true} />
       </div>
     );
 

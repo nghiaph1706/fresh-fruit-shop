@@ -43,7 +43,8 @@ function QuestionItem({ question }: { question: Question }) {
         <div className="relative h-10 w-10 overflow-hidden rounded border border-gray-200">
           <Image
             src={product.image?.original ?? productPlaceholder}
-            layout="fill"
+            fill
+            sizes="(max-width: 768px) 100vw"
             alt={product?.name}
           />
         </div>
@@ -80,7 +81,7 @@ function QuestionItem({ question }: { question: Question }) {
         </div>
       </div>
 
-      <div className="rounded-md bg-gray-50 py-3 px-4">
+      <div className="rounded-md bg-gray-50 px-4 py-3">
         <p className="mb-2.5 text-base font-semibold text-heading">
           <span
             className="inline-block uppercase ltr:mr-1 rtl:ml-1"
@@ -136,7 +137,7 @@ const MyQuestions: React.FC = () => {
       <div className="flex w-full flex-col">
         <div className="mb-8 flex items-center justify-center sm:mb-10">
           <h1 className="text-center text-lg font-semibold text-heading sm:text-xl">
-            {t('profile-sidebar-my-wishlist')}
+            {t('profile-sidebar-my-questions')}
           </h1>
         </div>
         {rangeMap(15, (i) => (
@@ -151,7 +152,7 @@ const MyQuestions: React.FC = () => {
       <div className="flex w-full flex-col">
         <div className="mb-8 flex items-center justify-between sm:mb-10">
           <h1 className="ml-auto text-center text-lg font-semibold text-heading sm:text-xl">
-            {t('profile-sidebar-my-wishlist')}
+            {t('profile-sidebar-my-questions')}
           </h1>
         </div>
         <NotFound
@@ -165,20 +166,20 @@ const MyQuestions: React.FC = () => {
   return (
     <>
       <div className="flex w-full flex-col">
-        <div className="mb-8 flex items-center justify-center sm:mb-10">
+        <div className="mb-2 flex items-center justify-center md:mb-8">
           <h1 className="text-center text-lg font-semibold text-heading sm:text-xl">
             {t('profile-sidebar-my-questions')}
           </h1>
         </div>
         <div>
-          {questions?.map((item:any) => (
+          {questions?.map((item: any) => (
             <QuestionItem key={item.id} question={item} />
           ))}
         </div>
       </div>
 
       {hasMore && (
-        <div className="mt-8 flex w-full justify-center">
+        <div className="xxl:mt-8 mt-2 flex w-full justify-center xl:mt-4">
           <Button
             loading={isLoadingMore}
             disabled={isLoadingMore}

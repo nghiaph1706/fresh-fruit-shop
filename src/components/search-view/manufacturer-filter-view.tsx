@@ -3,7 +3,7 @@ import { useState, useEffect, useMemo } from 'react';
 import Checkbox from '@/components/ui/forms/checkbox/checkbox';
 import { useRouter } from 'next/router';
 import Scrollbar from '@/components/ui/scrollbar';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import { useManufacturers } from '@/framework/manufacturer';
 import ErrorMessage from '@/components/ui/error-message';
 import Spinner from '@/components/ui/loaders/spinner/spinner';
@@ -62,9 +62,9 @@ const ManufacturerFilterView = ({ manufacturers }: Props) => {
 
 const ManufacturerFilter = () => {
   const { locale } = useRouter();
-  const { manufacturers, isLoading, error } = useManufacturers({ 
+  const { manufacturers, isLoading, error } = useManufacturers({
     language: locale,
-    limit: 100 
+    limit: 100,
   });
   if (error) return <ErrorMessage message={error.message} />;
   if (isLoading)

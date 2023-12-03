@@ -54,7 +54,6 @@ export default function SellingProductsGrid({ className, limit = 6 }: Props) {
               productPlaceholder
             }
             alt={siteSettings?.sellingAdvertisement?.image?.alt}
-            layout="responsive"
             width={426}
             height={990}
           />
@@ -65,7 +64,7 @@ export default function SellingProductsGrid({ className, limit = 6 }: Props) {
             ? rangeMap(limit, (i) => (
                 <ProductLoader key={i} uniqueKey={`product-${i}`} />
               ))
-            : products.map((product:any) => (
+            : products.map((product: any) => (
                 <ProductCard product={product} key={product.id} />
               ))}
         </div>

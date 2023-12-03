@@ -1,3 +1,4 @@
+import { Routes } from '@/config/routes';
 import { AUTH_TOKEN_KEY } from '@/lib/constants';
 import type { SearchParamOptions } from '@/types';
 import axios from 'axios';
@@ -14,6 +15,7 @@ const Axios = axios.create({
 // Change request data/error here
 Axios.interceptors.request.use((config) => {
   const token = Cookies.get(AUTH_TOKEN_KEY);
+  //@ts-ignore
   config.headers = {
     ...config.headers,
     Authorization: `Bearer ${token ? token : ''}`,
@@ -32,7 +34,7 @@ Axios.interceptors.response.use(
         error.response.data.message === 'PICKBAZAR_ERROR.NOT_AUTHORIZED')
     ) {
       Cookies.remove(AUTH_TOKEN_KEY);
-      Router.reload();
+      Router.replace(Routes.home);
     }
     return Promise.reject(error);
   }
@@ -63,7 +65,7 @@ export class HttpClient {
     return Object.entries(params)
       .filter(([, value]) => Boolean(value))
       .map(([k, v]) =>
-        ['type', 'categories', 'tags', 'author', 'manufacturer'].includes(k)
+        ['type', 'categories', 'tags', 'author', 'manufacturer','shops'].includes(k)
           ? `${k}.slug:${v}`
           : `${k}:${v}`
       )

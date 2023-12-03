@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react';
-import Portal from '@reach/portal';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   disableBodyScroll,
@@ -13,6 +12,8 @@ import { fadeInLeft } from '@/lib/motion/fade-in-left';
 import { fadeInOut } from '@/lib/motion/fade-in-out';
 import { useRouter } from 'next/router';
 import { getDirection } from '@/lib/constants';
+import dynamic from 'next/dynamic';
+const Portal = dynamic(() => import('@reach/portal'), { ssr: false });
 
 interface DrawerProps {
   children: any;

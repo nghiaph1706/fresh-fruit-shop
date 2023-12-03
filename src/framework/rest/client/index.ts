@@ -75,12 +75,32 @@ import type {
   SetupIntentInfo,
   PaymentIntentCollection,
   Card,
+  BestSellingProductQueryOptions,
+  UpdateEmailUserInput,
+  EmailChangeResponse,
+  VerificationEmailUserInput,
   StoreNoticeQueryOptions,
   StoreNoticePaginator,
   StoreNotice,
+  FAQS,
+  FaqsQueryOptions,
+  FaqsPaginator,
+  ShopMapLocation,
+  RefundQueryOptions,
+  RefundReasonPaginator,
+  TermsAndConditionsQueryOptions,
+  TermsAndConditionsPaginator,
+  FlashSaleQueryOptions,
+  FlashSalePaginator,
+  FlashSale,
+  RefundPolicyPaginator,
+  RefundPolicyQueryOptions,
+  SingleFlashSale,
+  FlashSaleProductsQueryOptions,
 } from '@/types';
 import { API_ENDPOINTS } from './api-endpoints';
 import { HttpClient } from './http-client';
+//@ts-ignore
 import { OTPVerifyResponse } from '@/types';
 
 class Client {
@@ -117,6 +137,9 @@ class Client {
     popular: (params: Partial<PopularProductQueryOptions>) =>
       HttpClient.get<Product[]>(API_ENDPOINTS.PRODUCTS_POPULAR, params),
 
+    bestSelling: (params: Partial<BestSellingProductQueryOptions>) =>
+      HttpClient.get<Product[]>(API_ENDPOINTS.BEST_SELLING_PRODUCTS, params),
+
     questions: ({ question, ...params }: QuestionQueryOptions) =>
       HttpClient.get<QuestionPaginator>(API_ENDPOINTS.PRODUCTS_QUESTIONS, {
         searchJoin: 'and',
@@ -130,7 +153,7 @@ class Client {
       HttpClient.get<Product>(`${API_ENDPOINTS.PRODUCTS}/${slug}`, {
         language,
         searchJoin: 'and',
-        with: 'categories;shop;type;variations;variations.attribute.values;manufacturer;variation_options;tags;author',
+        with: 'categories;shop;type;variations;variations.attribute.values;variation_options;tags',
       }),
 
     createFeedback: (input: CreateFeedbackInput) =>
@@ -142,6 +165,15 @@ class Client {
       ),
     createQuestion: (input: CreateQuestionInput) =>
       HttpClient.post<Review>(API_ENDPOINTS.PRODUCTS_QUESTIONS, input),
+    getProductsByFlashSale: ({ slug, language }: GetParams) => {
+      return HttpClient.get<Product>(
+        `${API_ENDPOINTS.PRODUCTS_BY_FLASH_SALE}`,
+        {
+          language,
+          slug,
+        }
+      );
+    },
   };
   myQuestions = {
     all: (params: MyQuestionQueryOptions) =>
@@ -209,14 +241,20 @@ class Client {
       }),
     get: (slug: string) =>
       HttpClient.get<Shop>(`${API_ENDPOINTS.SHOPS}/${slug}`),
+
+    searchNearShops: (input: ShopMapLocation) =>
+      HttpClient.get<any>(API_ENDPOINTS.NEAR_SHOPS, input),
+
+    getSearchNearShops: ({ lat, lng }: ShopMapLocation) =>
+      HttpClient.get<any>(`${API_ENDPOINTS.NEAR_SHOPS}/${lat}/${lng}`),
   };
   storeNotice = {
-    all: ({ shop_id, ...params }: Partial<StoreNoticeQueryOptions>) => {
+    all: ({ shop_id, shops, ...params }: Partial<StoreNoticeQueryOptions>) => {
       return HttpClient.get<StoreNoticePaginator>(API_ENDPOINTS.STORE_NOTICES, {
         searchJoin: 'and',
         shop_id: shop_id,
         ...params,
-        search: HttpClient.formatSearchParams({ shop_id }),
+        search: HttpClient.formatSearchParams({ shop_id, shops }),
       });
     },
   };
@@ -267,11 +305,16 @@ class Client {
         ...params,
       }),
     get: (tracking_number: string) =>
-      HttpClient.get<Order>(`${API_ENDPOINTS.ORDERS}/${tracking_number}`),
+      HttpClient.get<Order>(`${API_ENDPOINTS.ORDERS}/${tracking_number}`, {
+        with: 'refund',
+      }),
     create: (input: CreateOrderInput) =>
       HttpClient.post<Order>(API_ENDPOINTS.ORDERS, input),
     refunds: (params: Pick<QueryOptions, 'limit'>) =>
-      HttpClient.get<RefundPaginator>(API_ENDPOINTS.ORDERS_REFUNDS, params),
+      HttpClient.get<RefundPaginator>(API_ENDPOINTS.ORDERS_REFUNDS, {
+        with: 'refund_policy;order',
+        ...params,
+      }),
     createRefund: (input: CreateRefundInput) =>
       HttpClient.post<Refund>(API_ENDPOINTS.ORDERS_REFUNDS, input),
     payment: (input: CreateOrderPaymentInput) =>
@@ -294,9 +337,35 @@ class Client {
         API_ENDPOINTS.GENERATE_DOWNLOADABLE_PRODUCT_LINK,
         input
       ),
-    getPaymentIntent: ({ tracking_number }: { tracking_number: string }) =>
+    getPaymentIntentOriginal: ({
+      tracking_number,
+    }: {
+      tracking_number: string;
+    }) =>
       HttpClient.get<PaymentIntentCollection>(API_ENDPOINTS.PAYMENT_INTENT, {
         tracking_number,
+      }),
+    getPaymentIntent: ({
+      tracking_number,
+      payment_gateway,
+      recall_gateway,
+    }: {
+      tracking_number: string;
+      payment_gateway?: string;
+      recall_gateway?: boolean;
+    }) =>
+      HttpClient.get<PaymentIntentCollection>(API_ENDPOINTS.PAYMENT_INTENT, {
+        tracking_number,
+        payment_gateway,
+        recall_gateway,
+      }),
+  };
+  refundReason = {
+    all: ({ type, ...params }: Partial<RefundQueryOptions>) =>
+      HttpClient.get<RefundReasonPaginator>(API_ENDPOINTS.REFUNDS_REASONS, {
+        searchJoin: 'and',
+        ...params,
+        ...(type && { search: HttpClient.formatSearchParams({ type }) }),
       }),
   };
   users = {
@@ -335,6 +404,11 @@ class Client {
         API_ENDPOINTS.USERS_CHANGE_PASSWORD,
         input
       ),
+    updateEmail: (input: UpdateEmailUserInput) =>
+      HttpClient.post<EmailChangeResponse>(
+        API_ENDPOINTS.USERS_UPDATE_EMAIL,
+        input
+      ),
     logout: () => HttpClient.post<boolean>(API_ENDPOINTS.USERS_LOGOUT, {}),
     deleteAddress: ({ id }: { id: string }) =>
       HttpClient.delete<boolean>(`${API_ENDPOINTS.USERS_ADDRESS}/${id}`),
@@ -342,6 +416,12 @@ class Client {
       HttpClient.post<any>(API_ENDPOINTS.USERS_SUBSCRIBE_TO_NEWSLETTER, input),
     contactUs: (input: CreateContactUsInput) =>
       HttpClient.post<any>(API_ENDPOINTS.USERS_CONTACT_US, input),
+    resendVerificationEmail: () => {
+      return HttpClient.post<VerificationEmailUserInput>(
+        API_ENDPOINTS.SEND_VERIFICATION_EMAIL,
+        {}
+      );
+    },
   };
   wishlist = {
     all: (params: WishlistQueryOptions) =>
@@ -388,6 +468,92 @@ class Client {
     makeDefaultPaymentMethod: (input: any) =>
       HttpClient.post<any>(API_ENDPOINTS.SET_DEFAULT_CARD, input),
   };
+
+  faqs = {
+    // all: (params?: any) =>
+    //   HttpClient.get<FAQS[]>(API_ENDPOINTS.FAQS, { ...params }),
+    all: ({ faq_type, issued_by, ...params }: Partial<FaqsQueryOptions>) =>
+      HttpClient.get<FaqsPaginator>(API_ENDPOINTS.FAQS, {
+        ...params,
+        search: HttpClient.formatSearchParams({
+          faq_type,
+          issued_by,
+        }),
+      }),
+    get: (id: string) => HttpClient.get<FAQS>(`${API_ENDPOINTS.FAQS}/${id}`),
+  };
+
+  termsAndConditions = {
+    // all: (params?: any) =>
+    //   HttpClient.get<FAQS[]>(API_ENDPOINTS.FAQS, { ...params }),
+    all: ({
+      type,
+      issued_by,
+      ...params
+    }: Partial<TermsAndConditionsQueryOptions>) =>
+      HttpClient.get<TermsAndConditionsPaginator>(
+        API_ENDPOINTS.TERMS_AND_CONDITIONS,
+        {
+          searchJoin: 'and',
+          ...params,
+          search: HttpClient.formatSearchParams({
+            type,
+            issued_by,
+          }),
+        }
+      ),
+    get: (id: string) =>
+      HttpClient.get<FAQS>(`${API_ENDPOINTS.TERMS_AND_CONDITIONS}/${id}`),
+  };
+  flashSale = {
+    // all: (params?: any) =>
+    //   HttpClient.get<FAQS[]>(API_ENDPOINTS.FAQS, { ...params }),
+    all: ({ ...params }: Partial<FlashSaleQueryOptions>) =>
+      HttpClient.get<FlashSalePaginator>(API_ENDPOINTS.FLASH_SALE, {
+        ...params,
+      }),
+    get: ({ slug, language }: { slug: string; language?: string }) => {
+      return HttpClient.get<FlashSale>(`${API_ENDPOINTS.FLASH_SALE}/${slug}`, {
+        language,
+        with: 'products',
+      });
+    },
+    getProductsByFlashSale: ({
+      slug,
+      ...params
+    }: FlashSaleProductsQueryOptions) => {
+      return HttpClient.get<ProductPaginator>(
+        API_ENDPOINTS.PRODUCTS_BY_FLASH_SALE,
+        {
+          searchJoin: 'and',
+          slug,
+          ...params,
+        }
+      );
+    },
+  };
+
+  refundPolicies = {
+    all: ({
+      title,
+      status,
+      target,
+      ...params
+    }: Partial<RefundPolicyQueryOptions>) =>
+      HttpClient.get<RefundPolicyPaginator>(API_ENDPOINTS.REFUND_POLICIES, {
+        searchJoin: 'and',
+        ...params,
+        search: HttpClient.formatSearchParams({
+          title,
+          target,
+          status,
+        }),
+
+        with: 'shop;refunds',
+      }),
+  };
 }
 
-export default new Client();
+const client = new Client();
+
+export default client;

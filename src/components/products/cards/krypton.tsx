@@ -5,6 +5,7 @@ import usePrice from '@/lib/use-price';
 import { useTranslation } from 'next-i18next';
 import { Routes } from '@/config/routes';
 import { productPlaceholder } from '@/lib/placeholders';
+import { ExternalIcon } from '@/components/icons/external-icon';
 
 type KryptonProps = {
   product: any;
@@ -13,7 +14,7 @@ type KryptonProps = {
 
 const Krypton: React.FC<KryptonProps> = ({ product, className }) => {
   const { t } = useTranslation('common');
-  const { name, image, slug, min_price, max_price, product_type } =
+  const { name, image, slug, min_price, max_price, product_type, is_external } =
     product ?? {};
   const { price, basePrice, discount } = usePrice({
     amount: product.sale_price ? product.sale_price : product.price!,
@@ -39,21 +40,23 @@ const Krypton: React.FC<KryptonProps> = ({ product, className }) => {
           <Image
             src={image?.original ?? productPlaceholder}
             alt={name}
-            layout="fill"
-            objectFit="contain"
-            className="product-image"
+            fill
+            sizes="(max-width: 768px) 100vw"
+            className="product-image object-contain"
           />
           {discount && (
             <div className="absolute top-3 rounded-full bg-yellow-500 px-2 text-xs font-semibold leading-6 text-light ltr:right-3 rtl:left-3 md:top-4 md:px-2.5 ltr:md:right-4 rtl:md:left-4">
               {discount}
             </div>
           )}
+
         </div>
         {/* End of product image */}
 
         <header className="p-3 text-center md:p-6">
-          <h3 className="mb-2 truncate text-sm font-semibold text-heading">
+          <h3 className="mb-2 truncate text-sm font-semibold text-heading flex items-center justify-center gap-1">
             {name}
+            {is_external ? <ExternalIcon className="h-3.5 w-3.5 stroke-2 text-muted" /> : null}
           </h3>
           {/* End of product title */}
 

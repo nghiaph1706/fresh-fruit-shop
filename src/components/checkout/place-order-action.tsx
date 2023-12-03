@@ -18,7 +18,10 @@ import { useLogout, useUser } from '@/framework/user';
 import { PaymentGateway } from '@/types';
 import { useSettings } from '@/framework/settings';
 
-export const PlaceOrderAction: React.FC<{ className?: string }> = (props) => {
+export const PlaceOrderAction: React.FC<{
+  className?: string;
+  children?: React.ReactNode;
+}> = (props) => {
   const { t } = useTranslation('common');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { createOrder, isLoading } = useCreateOrder();
@@ -36,7 +39,10 @@ export const PlaceOrderAction: React.FC<{ className?: string }> = (props) => {
       customer_contact,
       customer_name,
       payment_gateway,
+      payment_sub_gateway,
+      note,
       token,
+      payable_amount,
     },
   ] = useAtom(checkoutAtom);
   const [discount] = useAtom(discountAtom);
@@ -54,7 +60,7 @@ export const PlaceOrderAction: React.FC<{ className?: string }> = (props) => {
   const {
     settings: { freeShippingAmount, freeShipping },
   } = useSettings();
-  let freeShippings = freeShipping && Number(freeShippingAmount) <= subtotal
+  let freeShippings = freeShipping && Number(freeShippingAmount) <= subtotal;
   const total = calculatePaidTotal(
     {
       totalAmount: subtotal,
@@ -73,6 +79,12 @@ export const PlaceOrderAction: React.FC<{ className?: string }> = (props) => {
       return;
     }
 
+    const isFullWalletPayment =
+      use_wallet_points && payable_amount == 0 ? true : false;
+    const gateWay = isFullWalletPayment
+      ? PaymentGateway.FULL_WALLET_PAYMENT
+      : payment_gateway;
+
     let input = {
       //@ts-ignore
       products: available_items?.map((item) => formatOrderedProduct(item)),
@@ -81,13 +93,16 @@ export const PlaceOrderAction: React.FC<{ className?: string }> = (props) => {
       discount: discount ?? 0,
       paid_total: total,
       sales_tax: verified_response?.total_tax,
-      delivery_fee: freeShippings?0:verified_response?.shipping_charge,
+      delivery_fee: freeShippings ? 0 : verified_response?.shipping_charge,
       total,
       delivery_time: delivery_time?.title,
       customer_contact,
       customer_name,
-      payment_gateway,
+      note,
+      payment_gateway: gateWay,
+      payment_sub_gateway,
       use_wallet_points,
+      isFullWalletPayment,
       billing_address: {
         ...(billing_address?.address && billing_address.address),
       },
@@ -107,13 +122,13 @@ export const PlaceOrderAction: React.FC<{ className?: string }> = (props) => {
   let formatRequiredFields = isDigitalCheckout
     ? [customer_contact, payment_gateway, available_items]
     : [
-      customer_contact,
-      payment_gateway,
-      billing_address,
-      shipping_address,
-      delivery_time,
-      available_items,
-    ];
+        customer_contact,
+        payment_gateway,
+        billing_address,
+        shipping_address,
+        delivery_time,
+        available_items,
+      ];
   if (!isDigitalCheckout && !me) {
     formatRequiredFields.push(customer_name);
   }
@@ -127,7 +142,7 @@ export const PlaceOrderAction: React.FC<{ className?: string }> = (props) => {
         loading={isLoading}
         className={classNames('mt-5 w-full', props.className)}
         onClick={handlePlaceOrder}
-        disabled={!isAllRequiredFieldSelected}
+        disabled={!isAllRequiredFieldSelected || !!isLoading}
         {...props}
       />
       {errorMessage && (

@@ -12,33 +12,34 @@ const CategoryCard: React.FC<CategoryItemProps> = ({ item, onClick }) => {
 
   return (
     <div
-      className="relative w-full h-80 rounded-lg p-8 bg-light shadow-downfall-sm transition-shadow hover:shadow-downfall-lg group"
+      className="group relative h-80 w-full rounded-lg bg-light p-8 shadow-downfall-sm transition-shadow hover:shadow-downfall-lg"
       onClick={onClick}
       role="button"
     >
-      <div className="flex flex-col flex-1 h-full relative z-10">
-        <h3 className="text-heading font-semibold text-lg mb-1">{item.name}</h3>
-        <span className="text-body text-s">
+      <div className="relative z-10 flex h-full flex-1 flex-col">
+        <h3 className="mb-1 text-lg font-semibold text-heading">{item.name}</h3>
+        <span className="text-s text-body">
           {item?.children?.length
             ? `${item?.children?.length} ${
                 item?.children?.length > 1
                   ? t('text-categories')
                   : t('text-category')
               }`
-            : item?.children?.length ? formatString(item?.products_count, 'Item') : ''}
+            : item?.children?.length
+            ? formatString(item?.products_count, 'Item')
+            : ''}
         </span>
 
-        <button className="mt-auto flex text-accent font-semibold text-sm underline opacity-100 lg:opacity-0 transition-opacity group-hover:opacity-100">
+        <button className="mt-auto flex text-sm font-semibold text-accent underline opacity-100 transition-opacity group-hover:opacity-100 lg:opacity-0">
           {t('text-view-more')}
         </button>
       </div>
 
-      <div className="absolute bottom-0 ltr:right-0 rtl:left-0 w-full h-full rounded-lg overflow-hidden">
+      <div className="absolute bottom-0 h-full w-full overflow-hidden rounded-lg ltr:right-0 rtl:left-0">
         <Image
-          className="w-full h-full"
+          className="h-full w-full"
           src={item?.image?.original ?? productPlaceholder}
           alt={item?.name ?? ''}
-          layout="responsive"
           width={432}
           height={336}
         />

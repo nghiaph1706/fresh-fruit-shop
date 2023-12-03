@@ -1,6 +1,12 @@
 import Header from './header';
-import MobileNavigation from './mobile-navigation';
+import dynamic from 'next/dynamic';
 
+const MobileNavigation = dynamic(
+  () => import('@/components/layouts/mobile-navigation'),
+  {
+    ssr: false,
+  }
+);
 export default function GeneralLayout({
   children,
   layout,

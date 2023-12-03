@@ -1,5 +1,5 @@
 import { FilterIcon } from '@/components/icons/filter-icon';
-import MobileNavigation from '@/components/layouts/mobile-navigation';
+// import MobileNavigation from '@/components/layouts/mobile-navigation';
 import GeneralLayout from '@/components/layouts/_general';
 import Details from '@/components/manufacturer/details';
 import { Grid } from '@/components/products/grid';
@@ -11,13 +11,20 @@ import { motion } from 'framer-motion';
 import { useAtom } from 'jotai';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import StickyBox from 'react-sticky-box';
 export { getStaticPaths, getStaticProps } from '@/framework/manufacturer.ssr';
 
 const CartCounterButton = dynamic(
   () => import('@/components/cart/cart-counter-button'),
   { ssr: false }
+);
+
+const MobileNavigation = dynamic(
+  () => import('@/components/layouts/mobile-navigation'),
+  {
+    ssr: false,
+  }
 );
 
 export default function Manufacturer({ manufacturer, variables }: any) {
@@ -28,7 +35,7 @@ export default function Manufacturer({ manufacturer, variables }: any) {
     useProducts({ ...variables, ...query });
   const { width } = useWindowSize();
 
-  const productsItem:any = products;
+  const productsItem: any = products;
   return (
     <>
       <div className="flex w-full flex-col">
@@ -60,7 +67,7 @@ const GetLayout = (page: React.ReactElement) => {
     <GeneralLayout>
       <>
         <div className="w-full bg-light">
-          <div className="mx-auto flex min-h-screen w-full max-w-1920 px-5 py-10 rtl:space-x-reverse lg:space-x-10 xl:py-14 xl:px-16">
+          <div className="mx-auto flex min-h-screen w-full max-w-1920 px-5 pt-10 pb-16 rtl:space-x-reverse lg:space-x-10 xl:py-14 xl:px-16">
             <div className="hidden w-80 shrink-0 lg:block">
               <StickyBox offsetTop={140} offsetBottom={30}>
                 <SidebarFilter type={type} showManufacturers={false} />
@@ -79,7 +86,7 @@ const GetLayout = (page: React.ReactElement) => {
                 data: { type, showManufacturers: false },
               })
             }
-            className="flex h-full items-center justify-center p-2 focus:text-accent focus:outline-none"
+            className="flex h-full items-center justify-center p-2 focus:text-accent focus:outline-0"
           >
             <span className="sr-only">{t('text-filter')}</span>
             <FilterIcon width="17.05" height="18" />

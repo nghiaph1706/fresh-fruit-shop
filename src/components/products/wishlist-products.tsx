@@ -20,10 +20,10 @@ import { DEFAULT_LANGUAGE } from '@/lib/constants';
 function WishlistItem({ product }: { product: Product }) {
   const { t } = useTranslation('common');
   const { removeFromWishlist, isLoading } = useRemoveFromWishlist();
-  const productSingleUrl =
-    product?.language !== DEFAULT_LANGUAGE
-      ? `${product?.language}/${product?.slug}`
-      : product.slug;
+  // const productSingleUrl =
+  //   product?.language !== DEFAULT_LANGUAGE
+  //     ? `${product?.language}/${product?.slug}`
+  //     : product.slug;
 
   const { price, basePrice } = usePrice({
     amount: product?.sale_price ? product?.sale_price : product?.price,
@@ -41,7 +41,6 @@ function WishlistItem({ product }: { product: Product }) {
   function handleVariableProduct() {
     return openModal('SELECT_PRODUCT_VARIATION', product?.slug);
   }
-
   return (
     <div className="flex w-full items-start space-x-4 border-b border-gray-200 py-5 first:pt-0 last:border-0 last:pb-0 rtl:space-x-reverse sm:space-x-5 xl:items-center">
       <div className="relative flex h-16 w-16 shrink-0 items-center justify-center border border-gray-200 sm:h-[74px] sm:w-[74px]">
@@ -55,9 +54,9 @@ function WishlistItem({ product }: { product: Product }) {
       <div className="flex w-full flex-col items-start sm:flex-row sm:justify-between sm:space-x-4 rtl:sm:space-x-reverse xl:items-center">
         <div className="flex w-full flex-col sm:items-start">
           <Link
-            href={`${productSingleUrl}`}
+            href={`${Routes.products}/${product?.slug}`}
             className="text-lg font-semibold text-heading transition-colors hover:text-accent"
-            locale={'de'}
+            locale={product?.language}
           >
             {product?.name}
           </Link>
@@ -179,7 +178,7 @@ const WishlistProducts: React.FC = () => {
             {t('profile-sidebar-my-wishlist')}
           </h1>
         </div>
-        {wishlists?.map((item: any, index) => (
+        {wishlists?.map((item: any, index: number) => (
           <WishlistItem key={index} product={item} />
         ))}
       </div>

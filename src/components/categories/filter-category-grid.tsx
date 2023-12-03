@@ -74,7 +74,7 @@ const FilterCategoryGrid: React.FC<FilterCategoryGridProps> = ({
   if (loading) {
     return (
       <div className="hidden xl:block">
-        <div className="mt-8 w-72 px-2">
+        <div className="px-2 mt-8 w-72">
           <CategoriesLoader />
         </div>
       </div>
@@ -103,16 +103,17 @@ const FilterCategoryGrid: React.FC<FilterCategoryGridProps> = ({
               <CategoryBreadcrumb
                 categories={[...parentCategories, selectedCategory]}
               />
+              
             </div>
           </Scrollbar>
         ) : (
-          <h3 className="mb-8 px-2 pt-2 text-2xl font-semibold text-heading">
+          <h3 className="px-2 pt-2 mb-8 text-2xl font-semibold text-heading">
             {t('text-all-categories')}
           </h3>
         )}
       </div>
 
-      <div className="p-5 !pt-0 md:p-8 lg:p-12 2xl:p-16">
+      <div className="p-5 pb-16 !pt-0 md:p-8 md:pb-20 lg:p-12 2xl:p-16">
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-6">
           {Array.isArray(renderCategories) &&
             renderCategories?.map((item: any, idx: number) => (

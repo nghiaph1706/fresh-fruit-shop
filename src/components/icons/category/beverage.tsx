@@ -3,6 +3,8 @@ export const Beverage: React.FC<React.SVGAttributes<{}>> = (props) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
+      width="14.569"
+      height="26.099"
       viewBox="0 0 14.569 26.099"
       {...props}
     >

@@ -25,7 +25,7 @@ const offerSliderBreakpoints = {
 export default function PromotionSlider({ sliders }: { sliders: any[] }) {
   const { t } = useTranslation();
   return (
-    <div className="px-6 py-5 border-t md:p-8 border-border-200 bg-light">
+    <div className="border-t border-border-200 bg-light px-5 py-5 md:p-8 lg:px-6">
       <div className="relative">
         <Swiper
           id="offer"
@@ -41,10 +41,9 @@ export default function PromotionSlider({ sliders }: { sliders: any[] }) {
           {sliders?.map((d) => (
             <SwiperSlide key={d.id}>
               <Image
-                className="w-full h-auto"
+                className="h-auto w-full"
                 src={d.original}
                 alt={d.id}
-                layout="responsive"
                 width="580"
                 height="270"
               />
@@ -52,14 +51,14 @@ export default function PromotionSlider({ sliders }: { sliders: any[] }) {
           ))}
         </Swiper>
         <div
-          className="absolute z-10 flex items-center justify-center w-8 h-8 -mt-4 transition-all duration-200 border rounded-full shadow-xl cursor-pointer prev top-2/4 ltr:-left-4 rtl:-right-4 ltr:md:-left-5 rtl:md:-right-5 md:-mt-5 md:w-9 md:h-9 bg-light border-border-200 border-opacity-70 text-heading hover:bg-accent hover:text-light hover:border-accent"
+          className="prev absolute top-2/4 z-10 -mt-4 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-border-200 border-opacity-70 bg-light text-heading shadow-xl transition-all duration-200 hover:border-accent hover:bg-accent hover:text-light ltr:-left-4 rtl:-right-4 md:-mt-5 md:h-9 md:w-9 ltr:md:-left-5 rtl:md:-right-5"
           role="button"
         >
           <span className="sr-only">{t('common:text-previous')}</span>
           <ArrowPrev width={18} height={18} />
         </div>
         <div
-          className="absolute z-10 flex items-center justify-center w-8 h-8 -mt-4 transition-all duration-200 border rounded-full shadow-xl cursor-pointer next top-2/4 ltr:-right-4 rtl:-left-4 ltr:md:-right-5 md:-mt-5 md:w-9 md:h-9 bg-light border-border-200 border-opacity-70 text-heading hover:bg-accent hover:text-light hover:border-accent"
+          className="next absolute top-2/4 z-10 -mt-4 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-border-200 border-opacity-70 bg-light text-heading shadow-xl transition-all duration-200 hover:border-accent hover:bg-accent hover:text-light ltr:-right-4 rtl:-left-4 md:-mt-5 md:h-9 md:w-9 ltr:md:-right-5"
           role="button"
         >
           <span className="sr-only">{t('common:text-next')}</span>

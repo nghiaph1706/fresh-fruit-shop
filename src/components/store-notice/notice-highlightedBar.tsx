@@ -36,14 +36,14 @@ const HighlightedBar = ({ notice }: { notice: StoreNotice }) => {
           <button
             onClick={() => setHighlightedBar('true')}
             aria-label="Close Button"
-            className="absolute flex items-center justify-center transition-colors duration-200 rounded-full outline-none top-3 h-7 w-7 hover:bg-white hover:bg-opacity-10 focus:bg-opacity-10 focus:text-white ltr:right-0 ltr:mr-2 rtl:left-0 rtl:ml-2 md:h-8 md:w-8 md:ltr:mr-3 md:rtl:ml-3"
+            className="absolute top-3 flex h-7 w-7 items-center justify-center rounded-full outline-none transition-colors duration-200 hover:bg-white hover:bg-opacity-10 focus:bg-opacity-10 focus:text-white ltr:right-0 ltr:mr-2 rtl:left-0 rtl:ml-2 md:h-8 md:w-8 md:ltr:mr-3 md:rtl:ml-3"
           >
             <svg
               stroke="currentColor"
               fill="currentColor"
               strokeWidth="0"
               viewBox="0 0 16 16"
-              className="w-6 h-6"
+              className="h-6 w-6"
               height="1em"
               width="1em"
               xmlns="http://www.w3.org/2000/svg"
@@ -57,19 +57,15 @@ const HighlightedBar = ({ notice }: { notice: StoreNotice }) => {
   );
 };
 
+// TODO : render multiple times with infinite loop
+
 const NoticeHighlightedBar = () => {
   const {
     query: { slug },
   } = useRouter();
-  const { data: shopData } = useShop({
-    slug: slug as string,
-  });
-  //@ts-ignore
-  const shopId = shopData?.id!;
 
-  //@ts-ignore
   const { storeNotices } = useStoreNotices({
-    shop_id: `${shopId}`,
+    shops: slug as string
   });
 
   return (
@@ -83,7 +79,9 @@ const NoticeHighlightedBar = () => {
             ))
           }
         </div>
-      ) : null}
+      ) : (
+        ''
+      )}
     </>
   );
 };

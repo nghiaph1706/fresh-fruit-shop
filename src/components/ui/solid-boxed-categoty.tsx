@@ -48,21 +48,22 @@ const CategoryItem: React.FC<CategoryItemProps> = ({ item }) => {
   return (
     <div
       className={cn(
-        'text-center rounded bg-light relative overflow-hidden cursor-pointer border-2',
+        'relative cursor-pointer overflow-hidden rounded border-2 bg-light text-center',
         selectedQueries === item.slug ? 'border-accent' : 'border-light'
       )}
       role="button"
       onClick={() => onCategoryClick(item?.slug!)}
     >
-      <div className="flex items-center justify-center h-32 w-auto relative overflow-hidden mb-3 my-2">
+      <div className="relative my-2 mb-3 flex h-32 w-auto items-center justify-center overflow-hidden">
         <Image
           src={item?.image?.original! ?? productPlaceholder}
           alt={item?.name!}
-          layout="fill"
-          objectFit="contain"
+          fill
+          sizes="(max-width: 768px) 100vw"
+          className="object-contain"
         />
       </div>
-      <span className="text-sm font-semibold text-heading text-center px-4 pb-4 block">
+      <span className="block px-4 pb-4 text-center text-sm font-semibold text-heading">
         {item.name}
       </span>
     </div>
@@ -125,14 +126,14 @@ function SolidBoxedCategoryMenu({ items }: any) {
       </Swiper>
       <div
         ref={prevRef}
-        className="category-slider-prev  w-8 h-8 flex items-center justify-center text-heading bg-light shadow-300 outline-none rounded-full absolute top-1/2 -mt-4 z-10 cursor-pointer ltr:-left-3 rtl:-right-3 ltr:lg:-left-4 focus:outline-none"
+        className="category-slider-prev absolute top-1/2 z-10 -mt-4 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-light text-heading shadow-300 outline-none focus:outline-none ltr:-left-3 rtl:-right-3 ltr:lg:-left-4"
       >
         <span className="sr-only">{t('text-previous')}</span>
         {isRTL ? <ArrowNextIcon /> : <ArrowPrevIcon />}
       </div>
       <div
         ref={nextRef}
-        className="category-slider-next w-8 h-8 flex items-center justify-center text-heading bg-light shadow-300 outline-none rounded-full absolute top-1/2 -mt-4 z-10 cursor-pointer ltr:-right-3 rtl:-left-3 ltr:lg:-right-4 rtl:lg:-left-4 focus:outline-none"
+        className="category-slider-next absolute top-1/2 z-10 -mt-4 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-light text-heading shadow-300 outline-none focus:outline-none ltr:-right-3 rtl:-left-3 ltr:lg:-right-4 rtl:lg:-left-4"
       >
         <span className="sr-only">{t('text-next')}</span>
         {isRTL ? <ArrowPrevIcon /> : <ArrowNextIcon />}

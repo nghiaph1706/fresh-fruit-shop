@@ -21,6 +21,7 @@ const BannerWithSearch: React.FC<BannerProps> = ({ banners, layout }) => {
     rootMargin: '0px',
     threshold: 1,
   });
+
   useEffect(() => {
     if (intersection && intersection.isIntersecting) {
       hideHeaderSearch();
@@ -29,12 +30,11 @@ const BannerWithSearch: React.FC<BannerProps> = ({ banners, layout }) => {
     if (intersection && !intersection.isIntersecting) {
       showHeaderSearch();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [intersection]);
 
   return (
     <div
-      className={cn('relative hidden lg:block', {
+      className={cn('textClass relative hidden lg:block', {
         '!block': layout === 'minimal',
       })}
     >
@@ -57,11 +57,11 @@ const BannerWithSearch: React.FC<BannerProps> = ({ banners, layout }) => {
                   })}
                 >
                   <Image
-                    className="h-full min-h-140 w-full"
+                    className="h-full min-h-140 w-full object-cover"
                     src={banner.image?.original ?? productPlaceholder}
                     alt={banner.title ?? ''}
-                    layout="fill"
-                    objectFit="cover"
+                    fill
+                    sizes="(max-width: 768px) 100vw"
                   />
                   <div
                     className={cn(

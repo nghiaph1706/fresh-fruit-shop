@@ -5,6 +5,7 @@ import { deliveryTimeAtom } from '@/store/checkout';
 import { useEffect } from 'react';
 import { useTranslation } from 'next-i18next';
 import { useSettings } from '@/framework/settings';
+import { isArray, isEmpty } from 'lodash';
 
 interface ScheduleProps {
   label: string;
@@ -24,8 +25,10 @@ export const ScheduleGrid: React.FC<ScheduleProps> = ({
 
   const [selectedSchedule, setSchedule] = useAtom(deliveryTimeAtom);
   useEffect(() => {
-    setSchedule(schedules[0]);
-  }, []);
+    if (!isEmpty(schedules) && isArray(schedules)) {
+      setSchedule(schedules[0]);
+    }
+  }, [schedules]);
   return (
     <div className={className}>
       <div className="mb-5 flex items-center justify-between md:mb-8">

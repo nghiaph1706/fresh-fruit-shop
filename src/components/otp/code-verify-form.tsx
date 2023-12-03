@@ -48,7 +48,7 @@ export default function OtpCodeForm({
                       <span className="hidden sm:inline-block">-</span>
                     }
                     containerStyle="flex items-center justify-between -mx-2"
-                    inputStyle="flex items-center justify-center !w-full mx-2 sm:!w-9 !px-0 appearance-none transition duration-300 ease-in-out text-heading text-sm focus:outline-none focus:ring-0 border border-border-base rounded focus:border-accent h-12"
+                    inputStyle="flex items-center justify-center !w-full mx-2 sm:!w-9 !px-0 appearance-none transition duration-300 ease-in-out text-heading text-sm focus:outline-0 focus:ring-0 border border-border-base rounded focus:border-accent h-12"
                     disabledStyle="!bg-gray-100"
                   />
                 )}

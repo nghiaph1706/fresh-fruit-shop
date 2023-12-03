@@ -6,6 +6,8 @@ import ProfileContact from '@/components/profile/profile-contact';
 import Seo from '@/components/seo/seo';
 import { useUser } from '@/framework/user';
 import DashboardLayout from '@/layouts/_dashboard';
+import Email from "next-auth/providers/email";
+import ProfileUpdateEmail from "@/components/profile/profile-update-email";
 export { getStaticProps } from '@/framework/general.ssr';
 
 const ProfilePage = () => {
@@ -18,6 +20,7 @@ const ProfilePage = () => {
       <div className="w-full overflow-hidden px-1 pb-1">
         <div className="mb-8">
           <ProfileForm user={me} />
+         <ProfileUpdateEmail user={me} />
           <ProfileContact
             userId={me.id}
             profileId={me.profile?.id!}

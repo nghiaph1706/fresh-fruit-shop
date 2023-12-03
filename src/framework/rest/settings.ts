@@ -17,8 +17,8 @@ export function useSettings() {
   const formattedOptions = {
     language: locale,
   };
-  
-  const { data, isLoading, error } = useQuery<Settings, Error>(
+
+  const { data, isLoading, error, isFetching } = useQuery<Settings, Error>(
     [API_ENDPOINTS.SETTINGS, formattedOptions],
     ({ queryKey, pageParam }) =>
       client.settings.all(Object.assign({}, queryKey[1], pageParam))
@@ -28,6 +28,7 @@ export function useSettings() {
     settings: data?.options ?? {},
     isLoading,
     error,
+    isFetching,
   };
 }
 
@@ -83,7 +84,7 @@ export function useVerifyCoupon() {
         setFormError({
           code: t(`common:${data?.message}`),
         });
-      } 
+      }
       applyCoupon(data?.coupon);
     },
     onError: (error) => {

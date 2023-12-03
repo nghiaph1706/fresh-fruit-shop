@@ -9,7 +9,7 @@ import { useTranslation } from 'next-i18next';
 interface AddressesProps {
   addresses: Address[] | undefined;
   label: string;
-  atom: WritableAtom<Address | null, Address>;
+  atom: WritableAtom<Address | null, any, Address>;
   className?: string;
   count: number;
   type: string;

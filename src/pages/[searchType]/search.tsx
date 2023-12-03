@@ -1,5 +1,5 @@
 import { FilterIcon } from '@/components/icons/filter-icon';
-import MobileNavigation from '@/components/layouts/mobile-navigation';
+// import MobileNavigation from '@/components/layouts/mobile-navigation';
 import GeneralLayout from '@/components/layouts/_general';
 import { Grid } from '@/components/products/grid';
 import SearchCount from '@/components/search-view/search-count';
@@ -14,6 +14,15 @@ import { useAtom } from 'jotai';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import StickyBox from 'react-sticky-box';
+
+import dynamic from 'next/dynamic';
+
+const MobileNavigation = dynamic(
+  () => import('@/components/layouts/mobile-navigation'),
+  {
+    ssr: false,
+  }
+);
 
 export { getServerSideProps } from '@/framework/search.ssr';
 
@@ -90,7 +99,7 @@ const GetLayout = (page: React.ReactElement) => {
                 view: 'SEARCH_FILTER',
               })
             }
-            className="flex h-full items-center justify-center p-2 focus:text-accent focus:outline-none"
+            className="flex h-full items-center justify-center p-2 focus:text-accent focus:outline-0"
           >
             <span className="sr-only">{t('text-filter')}</span>
             <FilterIcon width="17.05" height="18" />

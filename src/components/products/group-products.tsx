@@ -29,7 +29,6 @@ export default function GroupProducts() {
                 alt="Advertisement image"
                 width={isEven(idx) ? 960 : 1560}
                 height={960}
-                layout="responsive"
                 className="rounded-lg lg:rounded-2xl"
               />
             </Link>

@@ -3,6 +3,8 @@ export const Cooking: React.FC<React.SVGAttributes<{}>> = (props) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
+      width="28.9"
+      height="16.9"
       viewBox="0 0 28.9 16.9"
       fill="currentColor"
       {...props}

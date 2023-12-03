@@ -28,9 +28,9 @@ const Oganesson: React.FC<OganessonProps> = ({ product, className }) => {
         <Image
           src={image?.original ?? productPlaceholder}
           alt={name}
-          layout="fill"
-          objectFit="contain"
-          className="product-image"
+          fill
+          sizes="(max-width: 768px) 100vw"
+          className="product-image object-contain"
         />
         {discount && (
           <div className="absolute top-3 rounded bg-accent px-1.5 text-xs font-semibold leading-6 text-light ltr:right-3 rtl:left-3 md:top-[22px] md:px-2 ltr:md:right-4 rtl:md:left-4 lg:px-2.5">

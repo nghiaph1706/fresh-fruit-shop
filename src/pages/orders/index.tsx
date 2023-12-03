@@ -21,23 +21,30 @@ function NoOrderFound() {
 }
 
 export default function OrdersPage() {
-  const { orders, isLoading, error, hasMore, loadMore, isLoadingMore, isFetching } = useOrders();
+  const {
+    orders,
+    isLoading,
+    error,
+    hasMore,
+    loadMore,
+    isLoadingMore,
+    isFetching,
+  } = useOrders();
   const [selectedOrder] = useSelectedOrder();
   const isLoadingStatus = !isLoadingMore && !isLoading && isFetching;
 
   const ordersItem: any = orders;
 
   if (error) return <ErrorMessage message={error.message} />;
-  // if (isLoading && !isEmpty(orders)) {
+
   if (isLoading && isEmpty(ordersItem)) {
     return (
       <div className="my-auto flex h-[80vh] w-full items-center justify-center rounded bg-light p-5 md:p-8">
-        <Spinner simple className="h-10 w-10" />
+        <Spinner simple className="w-10 h-10" />
       </div>
     );
   }
 
-  // if (!isLoading && isEmpty(orders)) {
   if (!isLoading && isEmpty(ordersItem)) {
     return <NoOrderFound />;
   }
@@ -73,12 +80,12 @@ export default function OrdersPage() {
 
 const getLayout = (page: React.ReactElement) =>
   getSiteLayout(
-    <div className="mx-auto flex w-full max-w-1920 flex-col items-start bg-light py-10 px-5 lg:bg-gray-100 xl:flex-row xl:py-14 xl:px-8 2xl:px-14">
+    <div className="flex flex-col items-start w-full px-5 py-10 mx-auto max-w-1920 bg-light lg:bg-gray-100 xl:flex-row xl:py-14 xl:px-8 2xl:px-14">
       <DashboardSidebar className="hidden shrink-0 ltr:mr-8 rtl:ml-8 xl:block xl:w-80" />
       {page}
     </div>
   );
 
-OrdersPage.authenticationRequired = true;
+// OrdersPage.authenticationRequired = true;
 
 OrdersPage.getLayout = getLayout;

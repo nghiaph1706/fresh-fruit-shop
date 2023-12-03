@@ -24,12 +24,12 @@ export function useToggleWishlist(product_id: string) {
     onSuccess: (data) => {
       queryClient.setQueryData(
         [`${API_ENDPOINTS.WISHLIST}/in_wishlist`, product_id],
-        (old:any) => !old
+        (old: any) => !old
       );
     },
     onError: (error) => {
       if (axios.isAxiosError(error)) {
-        toast.error(t(error.response?.data.message));
+        toast.error(`${t(error.response?.data.message)}`);
       }
     },
   });
@@ -46,12 +46,12 @@ export function useRemoveFromWishlist() {
     isSuccess,
   } = useMutation(client.wishlist.remove, {
     onSuccess: () => {
-      toast.success(t('text-removed-from-wishlist'));
+      toast.success(`${t('text-removed-from-wishlist')}`);
       queryClient.refetchQueries([API_ENDPOINTS.USERS_WISHLIST]);
     },
     onError: (error) => {
       if (axios.isAxiosError(error)) {
-        toast.error(t(error.response?.data.message));
+        toast.error(`${t(error.response?.data.message)}`);
       }
     },
   });
@@ -60,7 +60,6 @@ export function useRemoveFromWishlist() {
 }
 
 export function useWishlist(options?: WishlistQueryOptions) {
-  
   const { locale } = useRouter();
 
   const formattedOptions = {

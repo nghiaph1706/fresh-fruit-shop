@@ -69,10 +69,12 @@ const StripeSavedCardsList = ({
       );
 
       await createOrderPayment({
-        tracking_number: trackingNumber,
+        tracking_number: trackingNumber as string,
+        payment_gateway: 'stripe' as string,
       });
 
       if (confirmCardPayment?.paymentIntent?.status === 'succeeded') {
+        //@ts-ignore
         toast.success(t('payment-successful'));
         setLoading(false);
         closeModal();
@@ -117,7 +119,6 @@ const StripeSavedCardsList = ({
                 src={images[network]}
                 width={40}
                 height={28}
-                layout="responsive"
                 alt={t('text-company')}
               />
             ) : (
@@ -125,7 +126,6 @@ const StripeSavedCardsList = ({
                 src={Fallback}
                 width={40}
                 height={28}
-                layout="responsive"
                 alt={t('text-company')}
               />
             )}

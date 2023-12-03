@@ -15,6 +15,7 @@ import type { LoginUserInput } from '@/types';
 import { AnonymousIcon } from '@/components/icons/anonymous-icon';
 import { useRouter } from 'next/router';
 import { Routes } from '@/config/routes';
+import { useSettings } from '@/framework/settings';
 
 const loginFormSchema = yup.object().shape({
   email: yup
@@ -27,8 +28,11 @@ function LoginForm() {
   const { t } = useTranslation('common');
   const router = useRouter();
   const { openModal } = useModalAction();
+  const { settings, isLoading: settingLoading } = useSettings();
   const isCheckout = router.pathname.includes('checkout');
   const { mutate: login, isLoading, serverError, setServerError } = useLogin();
+  
+  const guestCheckout = settings.guestCheckout;
 
   function onSubmit({ email, password }: LoginUserInput) {
     login({
@@ -108,7 +112,7 @@ function LoginForm() {
           {t('text-login-mobile')}
         </Button>
 
-        {isCheckout && (
+        {isCheckout && guestCheckout && (
           <Button
             className="h-11 w-full !bg-pink-700 !text-light hover:!bg-pink-800 sm:h-12"
             disabled={isLoading}
@@ -126,7 +130,7 @@ function LoginForm() {
         {t('text-no-account')}{' '}
         <button
           onClick={() => openModal('REGISTER')}
-          className="font-semibold text-accent underline transition-colors duration-200 hover:text-accent-hover hover:no-underline focus:text-accent-hover focus:no-underline focus:outline-none ltr:ml-1 rtl:mr-1"
+          className="font-semibold text-accent underline transition-colors duration-200 hover:text-accent-hover hover:no-underline focus:text-accent-hover focus:no-underline focus:outline-0 ltr:ml-1 rtl:mr-1"
         >
           {t('text-register')}
         </button>

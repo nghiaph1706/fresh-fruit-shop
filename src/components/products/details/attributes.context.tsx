@@ -5,7 +5,9 @@ export const AttributesContext = React.createContext<State | any>(initialState);
 
 AttributesContext.displayName = 'AttributesContext';
 
-export const AttributesProvider: React.FC = (props) => {
+export const AttributesProvider: React.FC<{
+  children?: React.ReactNode;
+}> = (props) => {
   const [state, dispatch] = React.useState(initialState);
   const value = React.useMemo(
     () => ({ attributes: state, setAttributes: dispatch }),

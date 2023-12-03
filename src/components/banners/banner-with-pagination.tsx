@@ -27,8 +27,8 @@ const BannerWithPagination: React.FC<BannerProps> = ({ banners, slug }) => {
             pagination={{
               bulletClass:
                 'swiper-pagination-bullet !w-2.5 !h-2.5 !p-1 !rounded-full bg-gray-400 !border-0 !opacity-70',
-              bulletActiveClass: '!w-3 !h-3 !bg-accent',
               clickableClass: 'cursor-pointer',
+              bulletActiveClass: '!bg-accent',
               clickable: true,
             }}
           >
@@ -40,7 +40,6 @@ const BannerWithPagination: React.FC<BannerProps> = ({ banners, slug }) => {
                       className="h-full w-full"
                       src={banner.image?.original ?? productPlaceholder}
                       alt={banner.title ?? ''}
-                      layout="responsive"
                       width={1800}
                       height={610}
                     />

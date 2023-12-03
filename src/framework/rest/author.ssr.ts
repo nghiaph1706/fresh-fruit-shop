@@ -39,7 +39,10 @@ export const getStaticProps: GetStaticProps<
   );
 
   try {
-    const author = await client.authors.get({slug: params!.author, language: locale});
+    const author = await client.authors.get({
+      slug: params!.author,
+      language: locale,
+    });
     return {
       props: {
         author,

@@ -54,7 +54,7 @@ export function useCreateReview() {
     client.reviews.create,
     {
       onSuccess: (res) => {
-        toast.success(t('text-review-request-submitted'));
+        toast.success(`${t('text-review-request-submitted')}`);
       },
       onSettled: () => {
         queryClient.invalidateQueries([API_ENDPOINTS.ORDERS]);
@@ -76,7 +76,7 @@ export function useUpdateReview() {
     client.reviews.update,
     {
       onSuccess: (res) => {
-        toast.success(t('text-review-request-update-submitted'));
+        toast.success(`${t('text-review-request-update-submitted')}`);
       },
       onSettled: () => {
         queryClient.invalidateQueries([API_ENDPOINTS.ORDERS]);

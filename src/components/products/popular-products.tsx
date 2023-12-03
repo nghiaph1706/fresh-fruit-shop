@@ -39,7 +39,7 @@ export default function PopularProductsGrid({
             ? rangeMap(limit, (i) => (
                 <ProductLoader key={i} uniqueKey={`product-${i}`} />
               ))
-            : products.map((product:any) => (
+            : products.map((product: any) => (
                 <ProductCard product={product} key={product?.id} />
               ))}
         </div>

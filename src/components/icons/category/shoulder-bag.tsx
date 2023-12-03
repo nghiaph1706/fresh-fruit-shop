@@ -5,7 +5,6 @@ export const ShoulderBags: React.FC<React.SVGAttributes<{}>> = (props) => {
       xmlns="http://www.w3.org/2000/svg"
       width="13"
       height="18.03"
-      viewBox="0 0 13 18.03"
       fill="currentColor"
       {...props}
     >

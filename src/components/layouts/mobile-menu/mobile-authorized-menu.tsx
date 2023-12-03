@@ -20,7 +20,7 @@ export default function MobileAuthorizedMenu() {
 
   return (
     <DrawerWrapper>
-      <ul className="flex-grow">
+      <ul className="grow">
         <li className="flex w-full items-center justify-between border-t border-dashed border-border-200 bg-gray-100 px-5 pt-3 text-sm font-semibold capitalize text-body focus:outline-none ltr:text-left rtl:text-right md:px-8">
           <span>{t('text-total-points')}</span>
           <span>{me?.wallet?.total_points ?? 0}</span>

@@ -3,6 +3,8 @@ export const Dairy: React.FC<React.SVGAttributes<{}>> = (props) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
+      width="16.967"
+      height="22.1"
       viewBox="0 0 16.967 22.1"
       fill="currentColor"
       {...props}

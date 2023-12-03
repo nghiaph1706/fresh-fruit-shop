@@ -34,7 +34,7 @@ export const useDeleteCard = () => {
   const { mutate, isLoading, error } = useMutation(client.cards.remove, {
     onSuccess: () => {
       closeModal();
-      toast.success(t('common:card-successfully-deleted'));
+      toast.success(`${t('common:card-successfully-deleted')}`);
     },
     // Always refetch after error or success:
     onSettled: () => {
@@ -58,7 +58,7 @@ export function useAddCards(method_key?: any) {
     {
       onSuccess: () => {
         closeModal();
-        toast.success(t('common:card-successfully-add'), {
+        toast.success(`${t('common:card-successfully-add')}`, {
           toastId: 'success',
         });
       },
@@ -66,8 +66,7 @@ export function useAddCards(method_key?: any) {
         const {
           response: { data },
         }: any = error ?? {};
-
-        toast.error(t(data?.message), {
+        toast.error(`${t(data?.message)}`, {
           toastId: 'error',
         });
       },
@@ -92,7 +91,7 @@ export function useDefaultPaymentMethod() {
     client.cards.makeDefaultPaymentMethod,
     {
       onSuccess: () => {
-        toast.success(t('common:set-default-card-message'));
+        toast.success(`${t('common:set-default-card-message')}`);
       },
       // Always refetch after error or success:
       onSettled: () => {

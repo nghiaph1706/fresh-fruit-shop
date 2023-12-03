@@ -23,17 +23,17 @@ const BannerWithoutSlider: React.FC<BannerProps> = ({ banners, layout }) => {
         })}
       >
         <Image
-          className="h-full min-h-140 w-full"
+          className="h-full min-h-140 w-full object-cover"
           src={banners![0]?.image?.original ?? productPlaceholder}
           alt={banners![0]?.title ?? ''}
-          layout="fill"
-          objectFit="cover"
+          fill
+          sizes="(max-width: 768px) 100vw"
         />
         <div
           className={cn(
             'absolute inset-0 flex w-full flex-col items-center justify-center p-5 text-center md:px-20 lg:space-y-10',
             {
-              'space-y-5 md:!space-y-8': layout === 'minimal',
+              'mt-24 space-y-5 md:mt-0 md:!space-y-8': layout === 'minimal',
             }
           )}
         >

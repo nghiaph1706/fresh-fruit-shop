@@ -116,7 +116,7 @@ function TokenForm({
             {...register('token')}
             error={t(errors.token?.message!)}
           />
-          <div className="grid grid-cols-1 gap-4 mt-4 sm:grid-cols-2">
+          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
             <Button
               onClick={handlePrevStep}
               className="order-1 w-full !bg-cyan-500 text-sm tracking-[0.2px] hover:!bg-cyan-600"
@@ -164,7 +164,7 @@ function PasswordForm({
             {...register('password')}
             error={t(errors.password?.message!)}
           />
-          <div className="grid grid-cols-1 gap-4 mt-4 sm:grid-cols-2">
+          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
             <Button
               onClick={handlePrevStep}
               className="order-1 w-full !bg-cyan-500 text-sm tracking-[0.2px] hover:!bg-cyan-600"
@@ -289,21 +289,21 @@ export default function ForgotUserPassword() {
         <div className="flex justify-center">
           <Logo />
         </div>
-        <p className="mt-4 text-sm leading-relaxed text-center mb-7 text-body sm:mt-5 sm:mb-10 md:text-base">
+        <p className="mt-4 mb-7 text-center text-sm leading-relaxed text-body sm:mt-5 sm:mb-10 md:text-base">
           {t('forgot-password-helper')}
         </p>
         <RenderFormSteps />
-        <div className="relative flex flex-col items-center justify-center text-sm mt-9 mb-7 text-heading sm:mt-11 sm:mb-8">
+        <div className="relative mt-9 mb-7 flex flex-col items-center justify-center text-sm text-heading sm:mt-11 sm:mb-8">
           <hr className="w-full" />
           <span className="start-2/4 -ms-4 absolute -top-2.5 bg-light px-2">
             {t('text-or')}
           </span>
         </div>
-        <div className="text-sm text-center text-body sm:text-base">
+        <div className="text-center text-sm text-body sm:text-base">
           {t('text-back-to')}{' '}
           <button
             onClick={() => openModal('LOGIN_VIEW')}
-            className="font-semibold underline transition-colors duration-200 ms-1 text-accent hover:text-accent-hover hover:no-underline focus:text-accent-hover focus:no-underline focus:outline-none"
+            className="ms-1 font-semibold text-accent underline transition-colors duration-200 hover:text-accent-hover hover:no-underline focus:text-accent-hover focus:no-underline focus:outline-0"
           >
             {t('text-login')}
           </button>

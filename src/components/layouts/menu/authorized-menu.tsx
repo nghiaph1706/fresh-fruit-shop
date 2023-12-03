@@ -24,14 +24,14 @@ const AuthorizedMenu: React.FC<{ minimal?: boolean }> = ({ minimal }) => {
       as="div"
       className="relative inline-block ltr:text-left rtl:text-right"
     >
-      <Menu.Button className="flex items-center focus:outline-none">
+      <Menu.Button className="flex items-center focus:outline-0">
         {minimal ? (
           <UserOutlinedIcon className="h-5 w-5" />
         ) : (
           <Avatar
             src={me?.profile?.avatar?.thumbnail ?? avatarPlaceholder}
             title="user name"
-            className="h-10 w-10"
+            className="h-[38px] w-[38px] border-border-200"
           />
         )}
         <span className="sr-only">{t('user-avatar')}</span>
@@ -49,7 +49,7 @@ const AuthorizedMenu: React.FC<{ minimal?: boolean }> = ({ minimal }) => {
         <Menu.Items
           as="ul"
           className={cn(
-            'absolute mt-1 w-48 rounded bg-white pb-4 shadow-700 focus:outline-none ltr:right-0 ltr:origin-top-right rtl:left-0 rtl:origin-top-left',
+            'absolute mt-5 w-48 rounded bg-white pb-4 shadow-700 focus:outline-none ltr:right-0 ltr:origin-top-right rtl:left-0 rtl:origin-top-left',
             {
               '!mt-2': minimal,
             }
@@ -68,7 +68,7 @@ const AuthorizedMenu: React.FC<{ minimal?: boolean }> = ({ minimal }) => {
                   <button
                     onClick={() => handleClick(href)}
                     className={cn(
-                      'block w-full py-2.5 px-6 text-sm font-semibold capitalize text-heading transition duration-200 hover:text-accent focus:outline-none ltr:text-left rtl:text-right',
+                      'block w-full py-2.5 px-6 text-sm font-semibold capitalize text-heading transition duration-200 hover:text-accent focus:outline-0 ltr:text-left rtl:text-right',
                       active ? 'text-accent' : 'text-heading'
                     )}
                   >
@@ -83,7 +83,7 @@ const AuthorizedMenu: React.FC<{ minimal?: boolean }> = ({ minimal }) => {
               <button
                 onClick={() => logout()}
                 className={cn(
-                  'block w-full py-2.5 px-6 text-sm font-semibold capitalize text-heading transition duration-200 hover:text-accent focus:outline-none ltr:text-left rtl:text-right'
+                  'block w-full py-2.5 px-6 text-sm font-semibold capitalize text-heading transition duration-200 hover:text-accent focus:outline-0 ltr:text-left rtl:text-right'
                 )}
               >
                 {t('auth-menu-logout')}

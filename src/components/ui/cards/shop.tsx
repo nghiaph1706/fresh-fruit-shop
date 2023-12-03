@@ -13,7 +13,6 @@ type ShopCardProps = {
 
 const ShopCard: React.FC<ShopCardProps> = ({ shop }) => {
   const { t } = useTranslation();
-
   const isNew = false;
 
   return (
@@ -28,8 +27,9 @@ const ShopCard: React.FC<ShopCardProps> = ({ shop }) => {
           <Image
             alt={t('common:text-logo')}
             src={shop?.logo?.thumbnail ?? productPlaceholder}
-            layout="fill"
-            objectFit="cover"
+            fill
+            sizes="(max-width: 768px) 100vw"
+            className="object-cover"
           />
         </div>
 
@@ -38,7 +38,7 @@ const ShopCard: React.FC<ShopCardProps> = ({ shop }) => {
             {shop?.name}
           </span>
           <span className="flex text-xs text-body">
-            <MapPin className="h-3.5 w-3.5 shrink-0 text-muted ltr:mr-1 rtl:ml-1" />
+            <MapPin className="h-3.5 w-3.5 shrink-0 text-gray-500 ltr:mr-1 rtl:ml-1" />
             {!isEmpty(formatAddress(shop?.address))
               ? formatAddress(shop?.address)
               : t('common:text-no-address')}

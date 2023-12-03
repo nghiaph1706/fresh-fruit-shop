@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import Scrollbar from '@/components/ui/scrollbar';
 import NotFound from '@/components/ui/not-found';
 import TreeMenu from '@/components/ui/tree-menu';
@@ -15,6 +16,12 @@ interface StickySidebarListCategoriesProps {
 const StickySidebarListCategories: React.FC<
   StickySidebarListCategoriesProps
 > = ({ notFound, categories, loading, className }) => {
+  // const [_isMobile, setMobile] = useState(false);
+
+  // useEffect(() => {
+  //   setMobile(isMobile);
+  // }, [setMobile]);
+
   if (loading) {
     return (
       <div className="hidden xl:block">
@@ -29,7 +36,7 @@ const StickySidebarListCategories: React.FC<
       className={`hidden h-full bg-light lg:sticky lg:top-22 xl:block xl:w-72 ${className}`}
     >
       {!isMobile && (
-        <div className="max-h-full flex-grow overflow-hidden">
+        <div className="max-h-full grow overflow-hidden">
           <Scrollbar
             className="max-h-screen w-full"
             style={{ height: 'calc(100vh - 5.35rem)' }}
@@ -48,7 +55,7 @@ const StickySidebarListCategories: React.FC<
       )}
 
       {isMobile && (
-        <div className="max-h-full flex-grow overflow-hidden">
+        <div className="max-h-full grow overflow-hidden">
           {!notFound ? (
             <div className="px-5">
               <TreeMenu items={categories} className="xl:py-8" />

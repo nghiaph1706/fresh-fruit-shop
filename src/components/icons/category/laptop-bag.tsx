@@ -3,7 +3,8 @@ export const LaptopBags: React.FC<React.SVGAttributes<{}>> = (props) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 18.1 13.626"
+      width="18.1"
+      height="13.626"
       fill="currentColor"
       {...props}
     >

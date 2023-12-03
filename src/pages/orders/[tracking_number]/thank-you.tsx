@@ -19,42 +19,50 @@ export default function OrderPage() {
   const { createOrderPayment } = useOrderPayment();
 
   useEffect(() => {
-    // @ts-ignore
+    //@ts-ignore
     switch (order?.payment_status) {
       case 'payment-pending':
-        toast.success(t('payment-pending'));
+        toast.success(`${t('payment-pending')}`);
         break;
 
       case 'payment-awaiting-for-approval':
-        toast.success(t('payment-awaiting-for-approval'));
+        toast.success(`${t('payment-awaiting-for-approval')}`);
         break;
 
       case 'payment-processing':
-        toast.success(t('payment-processing'));
+        toast.success(`${t('payment-processing')}`);
         break;
 
       case 'payment-success':
-        toast.success(t('payment-success'));
+        toast.success(`${t('payment-success')}`);
         break;
 
       case 'payment-reversal':
-        toast.error(t('payment-reversal'));
+        toast.error(`${t('payment-reversal')}`);
         break;
 
       case 'payment-failed':
-        toast.error(t('payment-failed'));
+        toast.error(`${t('payment-failed')}`);
         break;
     }
   }, [
-    // @ts-ignore
-    order?.payment_status,
+    //@ts-ignore
+    order?.payment_status
   ]);
 
   useEffect(() => {
-    createOrderPayment({
-      tracking_number: query?.tracking_number as string,
-    });
-  }, []);
+    //@ts-ignore
+    if (!isLoading && order?.payment_gateway.toLowerCase()) {
+      createOrderPayment({
+        tracking_number: query?.tracking_number as string,
+        //@ts-ignore
+        payment_gateway: order?.payment_gateway.toLowerCase() as string,
+      });
+    }
+  }, [
+    //@ts-ignore
+    order?.payment_status,
+  ]);
 
   if (isLoading) {
     return <Spinner showText={false} />;

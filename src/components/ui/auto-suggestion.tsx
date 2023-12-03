@@ -78,7 +78,6 @@ const AutoSuggestion: React.FC<Props> = ({
                         className="h-full w-full"
                         src={item?.image?.original ?? productPlaceholder}
                         alt={item?.name ?? ''}
-                        layout="responsive"
                         width={100}
                         height={100}
                       />

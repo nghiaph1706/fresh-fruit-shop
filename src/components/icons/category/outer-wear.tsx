@@ -3,7 +3,8 @@ export const OuterWear: React.FC<React.SVGAttributes<{}>> = (props) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 16.615 18"
+      width="16.615"
+      height="18"
       fill="currentColor"
       {...props}
     >

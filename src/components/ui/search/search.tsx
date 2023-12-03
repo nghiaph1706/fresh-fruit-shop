@@ -4,11 +4,19 @@ import { useTranslation } from 'next-i18next';
 import { useSearch } from './search.context';
 interface Props {
   label: string;
+  className?: string;
+  inputClassName?: string;
   variant?: 'minimal' | 'normal' | 'with-shadow' | 'flat';
   [key: string]: unknown;
 }
 
-const Search: React.FC<Props> = ({ label, variant, ...props }) => {
+const Search: React.FC<Props> = ({
+  label,
+  variant,
+  className,
+  inputClassName,
+  ...props
+}) => {
   const { t } = useTranslation();
   const router = useRouter();
   const { searchTerm, updateSearchTerm } = useSearch();
@@ -61,6 +69,8 @@ const Search: React.FC<Props> = ({ label, variant, ...props }) => {
       name="search"
       placeholder={t('common:text-search-placeholder')}
       variant={variant}
+      className={className}
+      inputClassName={inputClassName}
       {...props}
     />
   );

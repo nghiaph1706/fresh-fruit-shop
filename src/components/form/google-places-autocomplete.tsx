@@ -1,103 +1,51 @@
-import { Autocomplete, useJsApiLoader } from '@react-google-maps/api';
+import { useState, useEffect } from 'react';
+import { Autocomplete } from '@react-google-maps/api';
 import { GoogleMapLocation } from '@/types';
-import React from 'react';
 import { useTranslation } from 'next-i18next';
 import { SpinnerLoader } from '@/components/ui/loaders/spinner/spinner';
 import { MapPin } from '@/components/icons/map-pin';
-
-const libraries: any = ['places'];
+import useLocation, { locationAtom } from '@/lib/use-location';
+import CurrentLocation from '../icons/current-location';
+import { useAtom } from 'jotai';
 
 export default function GooglePlacesAutocomplete({
+  register,
   onChange,
+  onChangeCurrentLocation,
   data,
   disabled = false,
 }: {
-  onChange?: any;
+  register: any;
+  onChange?: () => void;
+  onChangeCurrentLocation?: () => void;
   data?: GoogleMapLocation;
   disabled?: boolean;
 }) {
   const { t } = useTranslation();
-  const { isLoaded, loadError } = useJsApiLoader({
-    id: 'google_map_autocomplete',
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY!,
-    libraries,
-  });
+  const [inputValue, setInputValue] = useState('');
+  const [
+    onLoad,
+    onUnmount,
+    onPlaceChanged,
+    getCurrentLocation,
+    isLoaded,
+    loadError,
+  ] = useLocation({ onChange, onChangeCurrentLocation, setInputValue });
+  const [location] = useAtom(locationAtom);
 
-  const [autocomplete, setAutocomplete] = React.useState<any>(null);
+  useEffect(() => {
+    const getLocation = data?.formattedAddress;
+    setInputValue(getLocation!);
+  }, [data]);
 
-  const onLoad = React.useCallback(function callback(autocompleteInstance) {
-    setAutocomplete(autocompleteInstance);
-  }, []);
-
-  const onUnmount = React.useCallback(function callback() {
-    setAutocomplete(null);
-  }, []);
-
-  const onPlaceChanged = () => {
-    const place = autocomplete.getPlace();
-
-    if (!place.geometry || !place.geometry.location) {
-      return;
-    }
-    const location: any = {
-      lat: place.geometry.location.lat(),
-      lng: place.geometry.location.lng(),
-      formattedAddress: place.formatted_address,
-    };
-
-    for (const component of place.address_components) {
-      // @ts-ignore remove once typings fixed
-      const componentType = component.types[0];
-
-      switch (componentType) {
-        case 'postal_code': {
-          location['zip'] = component.long_name;
-          break;
-        }
-
-        case 'postal_code_suffix': {
-          location['zip'] = `${location?.zip}-${component.long_name}`;
-          break;
-        }
-
-        case 'state_name':
-          location['street_address'] = component.long_name;
-          break;
-
-        case 'route':
-          location['street_address'] = component.long_name;
-          break;
-
-        case 'sublocality_level_1':
-          location['street_address'] = component.long_name;
-          break;
-
-        case 'locality':
-          location['city'] = component.long_name;
-          break;
-
-        case 'administrative_area_level_1': {
-          location['state'] = component.short_name;
-          break;
-        }
-
-        case 'country':
-          location['country'] = component.long_name;
-          break;
-      }
-    }
-    if (onChange) {
-      onChange(location);
-    }
-  };
   if (loadError) {
     return <div>{t('common:text-map-cant-load')}</div>;
   }
   return isLoaded ? (
     <div className="relative">
-      <div className="absolute top-0 left-0 flex items-center justify-center w-10 h-12 text-gray-400">
+      {/* <div className="absolute top-0 left-0 flex h-12 w-10 items-center justify-center text-gray-400">
         <MapPin className="w-[18px]" />
-      </div>
+      </div> */}
       <Autocomplete
         onLoad={onLoad}
         onPlaceChanged={onPlaceChanged}
@@ -111,14 +59,25 @@ export default function GooglePlacesAutocomplete({
       >
         <input
           type="text"
+          {...register('location')}
           placeholder={t('common:placeholder-search-location')}
-          defaultValue={data?.formattedAddress!}
-          className={`rtl::pr-9 flex h-12 w-full appearance-none items-center rounded border border-border-base text-sm text-heading transition duration-300 ease-in-out focus:border-accent focus:outline-none focus:ring-0 ltr:pr-4 ltr:pl-9 rtl:pl-4 ${
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          className={`line-clamp-1 flex h-12 w-full appearance-none items-center rounded border border-border-base p-4 pr-9 text-sm font-medium text-heading transition duration-300 ease-in-out invalid:border-red-500 focus:border-accent focus:outline-0 focus:ring-0 ${
             disabled ? 'cursor-not-allowed border-[#D4D8DD] bg-[#EEF1F4]' : ''
           }`}
           disabled={disabled}
         />
       </Autocomplete>
+      <div className="absolute top-0 right-0 flex h-12 w-12 items-center justify-center text-accent">
+        <CurrentLocation
+          className="h-5 w-5 cursor-pointer hover:text-accent"
+          onClick={() => {
+            getCurrentLocation();
+            setInputValue(location?.formattedAddress!);
+          }}
+        />
+      </div>
     </div>
   ) : (
     <SpinnerLoader />

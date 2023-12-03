@@ -11,7 +11,7 @@ import Badge from '@/components/ui/badge';
 import type { Order } from '@/types';
 import OrderViewHeader from './order-view-header';
 import OrderStatusProgressBox from '@/components/orders/order-status-progress-box';
-import { OrderStatus, PaymentStatus } from '@/types';
+import { OrderStatus, PaymentStatus, RefundStatus } from '@/types';
 
 interface Props {
   order: Order;
@@ -68,7 +68,6 @@ function RefundView({
 }) {
   const { t } = useTranslation('common');
   const { openModal } = useModalAction();
-
   return (
     <>
       {status ? (
@@ -114,7 +113,6 @@ const OrderDetails = ({ order, loadingStatus }: Props) => {
   const { price: sales_tax } = usePrice({
     amount: order?.sales_tax,
   });
-
   return (
     <div className="flex w-full flex-col border border-border-200 bg-white lg:w-2/3">
       <div className="flex flex-col items-center p-5 md:flex-row md:justify-between">
@@ -123,8 +121,15 @@ const OrderDetails = ({ order, loadingStatus }: Props) => {
           {tracking_number}
         </h2>
         <div className="flex items-center">
-          <RefundView status={refund?.status} orderId={id} />
-
+          {order?.payment_gateway !== 'CASH_ON_DELIVERY' &&
+          order?.payment_status !==
+            PaymentStatus?.FAILED?.toLocaleLowerCase() &&
+          order?.payment_status !==
+            PaymentStatus?.PENDING?.toLocaleLowerCase() ? (
+            <RefundView status={refund?.status} orderId={id} />
+          ) : (
+            ''
+          )}
           <Link
             href={Routes.order(tracking_number)}
             className="flex items-center text-sm font-semibold text-accent no-underline transition duration-200 hover:text-accent-hover focus:text-accent-hover"
@@ -203,7 +208,14 @@ const OrderDetails = ({ order, loadingStatus }: Props) => {
             paymentStatus={order?.payment_status as PaymentStatus}
           />
         </div>
-        <OrderItems products={products} orderId={id} />
+        <OrderItems
+          products={products}
+          orderId={id}
+          orderStatus={order?.order_status}
+          refund={Boolean(
+            order?.refund?.status === RefundStatus?.APPROVED?.toLowerCase()
+          )}
+        />
       </div>
     </div>
   );

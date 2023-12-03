@@ -6,15 +6,18 @@ import {
   SwiperOptions,
   Navigation,
   Thumbs,
+  FreeMode,
 } from '@/components/ui/slider';
 import { Image } from '@/components/ui/image';
 import { useRef, useState } from 'react';
 import { productPlaceholder } from '@/lib/placeholders';
 import { useIsRTL } from '@/lib/locals';
 import classNames from 'classnames';
+import { PlayIcon } from '../icons/play-icon';
 
 interface Props {
   gallery: any[];
+  video?: any;
   hideThumbs?: boolean;
   aspectRatio?: 'auto' | 'square';
 }
@@ -39,6 +42,7 @@ const swiperParams: SwiperOptions = {
 };
 export const ThumbsCarousel: React.FC<Props> = ({
   gallery,
+  video,
   hideThumbs = false,
   aspectRatio = 'square',
 }) => {
@@ -51,8 +55,11 @@ export const ThumbsCarousel: React.FC<Props> = ({
       <div className="relative">
         <Swiper
           id="productGallery"
-          modules={[Navigation, Thumbs]}
-          thumbs={{ swiper: thumbsSwiper }}
+          modules={[Navigation, Thumbs, FreeMode]}
+          thumbs={{
+            swiper:
+              thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null,
+          }}
           navigation={{
             prevEl: prevRef.current!, // Assert non-null
             nextEl: nextRef.current!, // Assert non-null
@@ -62,18 +69,32 @@ export const ThumbsCarousel: React.FC<Props> = ({
           {gallery?.map((item: any) => (
             <SwiperSlide
               key={`product-gallery-${item.id}`}
-              className="flex items-center justify-center selection:bg-transparent"
+              className="!flex items-center justify-center selection:bg-transparent"
             >
               <Image
                 src={item?.original ?? productPlaceholder}
                 alt={`Product gallery ${item.id}`}
                 width={aspectRatio === 'square' ? 450 : 420}
                 height={aspectRatio === 'square' ? 450 : 560}
-                // layout="responsive"
-                className="ltr:ml-auto rtl:mr-auto"
               />
             </SwiperSlide>
           ))}
+          {video?.length
+            ? video.map((item: any, index: number) => (
+                <SwiperSlide key={`product-video-${index}`}>
+                  {item.url.includes('iframe') ? (
+                    <div
+                      className="product-video-iframe"
+                      dangerouslySetInnerHTML={{ __html: item.url }}
+                    />
+                  ) : (
+                    <div className="product-video-iframe">
+                      <video controls src={item.url} />
+                    </div>
+                  )}
+                </SwiperSlide>
+              ))
+            : null}
         </Swiper>
         <div
           ref={prevRef}
@@ -97,13 +118,10 @@ export const ThumbsCarousel: React.FC<Props> = ({
         </div>
       </div>
       {/* End of product main slider */}
-
       <div
         className={classNames(
           'relative mx-auto mt-5 max-w-md lg:mt-8 lg:pb-2',
-          {
-            hidden: hideThumbs,
-          }
+          { hidden: hideThumbs }
         )}
       >
         <Swiper
@@ -112,6 +130,7 @@ export const ThumbsCarousel: React.FC<Props> = ({
           spaceBetween={20}
           watchSlidesProgress={true}
           freeMode={true}
+          modules={[Navigation, Thumbs, FreeMode]}
           observer={true}
           observeParents={true}
           breakpoints={galleryCarouselBreakpoints}
@@ -119,16 +138,37 @@ export const ThumbsCarousel: React.FC<Props> = ({
           {gallery?.map((item: any) => (
             <SwiperSlide
               key={`product-thumb-gallery-${item.id}`}
-              className="flex cursor-pointer items-center justify-center overflow-hidden rounded border border-border-200 border-opacity-75 hover:opacity-75"
+              className="!flex cursor-pointer items-center justify-center overflow-hidden rounded border border-border-200 border-opacity-75 hover:opacity-75"
             >
-              <Image
-                src={item?.thumbnail ?? productPlaceholder}
-                alt={`Product thumb gallery ${item.id}`}
-                width={80}
-                height={80}
-              />
+              <div className="relative h-20 w-20">
+                <Image
+                  src={item?.thumbnail ?? productPlaceholder}
+                  alt={`Product thumb gallery ${item.id}`}
+                  fill
+                  className="object-contain"
+                />
+              </div>
             </SwiperSlide>
           ))}
+          {video?.length
+            ? video.map((item: any, index: number) => (
+                <SwiperSlide
+                  key={`product-video-${index}`}
+                  className="relative flex cursor-pointer items-center justify-center overflow-hidden rounded border border-border-200 border-opacity-75 hover:opacity-75"
+                >
+                  {/* <Image
+                    src={productPlaceholder}
+                    alt={`Product Video ${item.id}`}
+                    width={80}
+                    height={80}
+                  /> */}
+                  <div className="h-20 w-20" />
+                  <div className="absolute top-1/2 left-1/2 flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-accent-400 text-white">
+                    <PlayIcon className="h-4 w-4" />
+                  </div>
+                </SwiperSlide>
+              ))
+            : null}
         </Swiper>
       </div>
     </div>

@@ -7,9 +7,10 @@ import classNames from 'classnames';
 import { useVerifyOrder } from '@/framework/order';
 import omit from 'lodash/omit';
 
-export const CheckAvailabilityAction: React.FC<{ className?: string }> = (
-  props
-) => {
+export const CheckAvailabilityAction: React.FC<{
+  className?: string;
+  children?: React.ReactNode;
+}> = (props) => {
   const [billing_address] = useAtom(billingAddressAtom);
   const [shipping_address] = useAtom(shippingAddressAtom);
   const { items, total, isEmpty } = useCart();
@@ -37,7 +38,7 @@ export const CheckAvailabilityAction: React.FC<{ className?: string }> = (
         loading={loading}
         className={classNames('mt-5 w-full', props.className)}
         onClick={handleVerifyCheckout}
-        disabled={isEmpty}
+        disabled={isEmpty || loading}
         {...props}
       />
     </>

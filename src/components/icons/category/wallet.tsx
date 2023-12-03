@@ -5,7 +5,6 @@ export const Wallet: React.FC<React.SVGAttributes<{}>> = (props) => {
       xmlns="http://www.w3.org/2000/svg"
       width="15.94"
       height="18.03"
-      viewBox="0 0 15.94 18.03"
       fill="currentColor"
       {...props}
     >

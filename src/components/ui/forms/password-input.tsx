@@ -13,7 +13,7 @@ export interface Props extends InputHTMLAttributes<HTMLInputElement> {
   forgotPageLink?: string;
   shadow?: boolean;
   variant?: 'normal' | 'solid' | 'outline';
-  error: string | undefined;
+  error: string | null;
   forgotPageRouteOnClick?: () => void;
 }
 
@@ -48,15 +48,15 @@ const PasswordInput = React.forwardRef<HTMLInputElement, Props>(
 
     return (
       <div className={className}>
-        <div className="flex items-center justify-between mb-2">
-          <label htmlFor={name} className="font-semibold text-sm text-body">
+        <div className="mb-2 flex items-center justify-between">
+          <label htmlFor={name} className="text-sm font-semibold text-body">
             {label}
           </label>
 
           {forgotPageLink && (
             <Link
               href={forgotPageLink}
-              className="text-xs text-accent transition-colors duration-200 focus:outline-none focus:text-accent-700 focus:font-semibold hover:text-accent-hover"
+              className="text-xs text-accent transition-colors duration-200 hover:text-accent-hover focus:font-semibold focus:text-accent-700 focus:outline-0"
             >
               {t('common:text-forgot-password')}
             </Link>
@@ -65,7 +65,7 @@ const PasswordInput = React.forwardRef<HTMLInputElement, Props>(
             <button
               onClick={forgotPageRouteOnClick}
               type="button"
-              className="text-xs text-accent transition-colors duration-200 focus:outline-none focus:text-accent-700 focus:font-semibold hover:text-accent-hover"
+              className="text-xs text-accent transition-colors duration-200 hover:text-accent-hover focus:font-semibold focus:text-accent-700 focus:outline-0"
             >
               {t('common:text-forgot-password')}
             </button>
@@ -78,7 +78,7 @@ const PasswordInput = React.forwardRef<HTMLInputElement, Props>(
             type={show ? 'text' : 'password'}
             ref={ref}
             className={cn(
-              'py-3 ltr:pl-4 rtl:pr-4 ltr:pr-11 rtl:pl-11 w-full rounded appearance-none transition duration-300 ease-in-out text-heading text-sm focus:outline-none focus:ring-0',
+              'w-full appearance-none rounded py-3 text-sm text-heading transition duration-300 ease-in-out focus:outline-0 focus:ring-0 ltr:pl-4 ltr:pr-11 rtl:pr-4 rtl:pl-11',
               shadow && 'focus:shadow',
               variantClasses[variant],
               inputClassName
@@ -91,13 +91,13 @@ const PasswordInput = React.forwardRef<HTMLInputElement, Props>(
           />
           <label
             htmlFor={name}
-            className="absolute ltr:right-4 rtl:left-4 top-5 -mt-2 text-body cursor-pointer"
+            className="absolute top-5 -mt-2 cursor-pointer text-body ltr:right-4 rtl:left-4"
             onClick={() => setShow((prev) => !prev)}
           >
             {show ? (
-              <EyeOff className="w-6 h-6" />
+              <EyeOff className="h-6 w-6" />
             ) : (
-              <Eye className="w-6 h-6" />
+              <Eye className="h-6 w-6" />
             )}
           </label>
         </div>

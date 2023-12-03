@@ -1,5 +1,30 @@
+import {
+  initialState,
+  updateFormState,
+} from '@/components/auth/forgot-password';
+import { initialOtpState, optAtom } from '@/components/otp/atom';
 import { useModalAction } from '@/components/ui/modal/modal.context';
+import { Routes } from '@/config/routes';
+import client from '@/framework/client';
+import { API_ENDPOINTS } from '@/framework/client/api-endpoints';
+import { setAuthCredentials } from '@/framework/utils/auth-utils';
+import { AUTH_CRED } from '@/framework/utils/constants';
+import { useToken } from '@/lib/hooks/use-token';
+import { authorizationAtom } from '@/store/authorization-atom';
+import { clearCheckoutAtom } from '@/store/checkout';
+import type {
+  ChangePasswordUserInput,
+  OtpLoginInputType,
+  RegisterUserInput,
+} from '@/types';
+import axios from 'axios';
+import { useAtom } from 'jotai';
+import Cookies from 'js-cookie';
+import { useStateMachine } from 'little-state-machine';
+import { signOut as socialLoginSignOut } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
 import {
   QueryClient,
   useMutation,
@@ -7,35 +32,37 @@ import {
   useQueryClient,
 } from 'react-query';
 import { toast } from 'react-toastify';
-import client from './client';
-import { authorizationAtom } from '@/store/authorization-atom';
-import { useAtom } from 'jotai';
-import { signOut as socialLoginSignOut } from 'next-auth/react';
-import { useToken } from '@/lib/hooks/use-token';
-import { API_ENDPOINTS } from './client/api-endpoints';
-import { useState } from 'react';
-import type {
-  RegisterUserInput,
-  ChangePasswordUserInput,
-  OtpLoginInputType,
-} from '@/types';
-import { initialOtpState, optAtom } from '@/components/otp/atom';
-import { useStateMachine } from 'little-state-machine';
-import {
-  initialState,
-  updateFormState,
-} from '@/components/auth/forgot-password';
-import { clearCheckoutAtom } from '@/store/checkout';
 
 export function useUser() {
   const [isAuthorized] = useAtom(authorizationAtom);
+  const { setEmailVerified, getEmailVerified } = useToken();
+  const { emailVerified } = getEmailVerified();
+  const router = useRouter();
+
   const { data, isLoading, error } = useQuery(
     [API_ENDPOINTS.USERS_ME],
     client.users.me,
     {
       enabled: isAuthorized,
+      retry: false,
+      onSuccess: (data) => {
+        if (emailVerified === false) {
+          setEmailVerified(true);
+          router.reload();
+          return;
+        }
+      },
       onError: (err) => {
-        console.log(err);
+        if (axios.isAxiosError(err)) {
+          if (err?.response?.status === 409) {
+            setEmailVerified(false);
+            router.push(Routes.verifyEmail);
+            return;
+          }
+          if (router.pathname === Routes.verifyEmail) {
+            return;
+          }
+        }
       },
     }
   );
@@ -66,6 +93,27 @@ export const useDeleteAddress = () => {
     },
   });
 };
+export const useUpdateEmail = () => {
+  const queryClient = useQueryClient();
+  const { t } = useTranslation();
+  return useMutation(client.users.updateEmail, {
+    onSuccess: (data) => {
+      if (data) {
+        toast.success(t('successfully-email-updated'));
+      }
+    },
+    onError: (error) => {
+      const {
+        response: { data },
+      }: any = error ?? {};
+
+      toast.error(data?.message);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries(API_ENDPOINTS.USERS_ME);
+    },
+  });
+};
 
 export const useUpdateUser = () => {
   const { t } = useTranslation();
@@ -74,12 +122,12 @@ export const useUpdateUser = () => {
   return useMutation(client.users.update, {
     onSuccess: (data) => {
       if (data?.id) {
-        toast.success(t('profile-update-successful'));
+        toast.success(`${t('profile-update-successful')}`);
         closeModal();
       }
     },
     onError: (error) => {
-      toast.error(t('error-something-wrong'));
+      toast.error(`${t('error-something-wrong')}`);
     },
     onSettled: () => {
       queryClient.invalidateQueries(API_ENDPOINTS.USERS_ME);
@@ -93,9 +141,9 @@ export const useContact = () => {
   return useMutation(client.users.contactUs, {
     onSuccess: (data) => {
       if (data.success) {
-        toast.success(t(data.message));
+        toast.success(`${t(data.message)}`);
       } else {
-        toast.error(t(data.message));
+        toast.error(`${t(data.message)}`);
       }
     },
     onError: (err) => {
@@ -118,6 +166,7 @@ export function useLogin() {
         return;
       }
       setToken(data.token);
+      setAuthCredentials(data.token, data.permissions);
       setAuthorized(true);
       closeModal();
     },
@@ -143,7 +192,7 @@ export function useSocialLogin() {
         return;
       }
       if (!data.token) {
-        toast.error(t('error-credential-wrong'));
+        toast.error(`${t('error-credential-wrong')}`);
       }
     },
     onError: (error: Error) => {
@@ -273,7 +322,7 @@ export function useRegister() {
         return;
       }
       if (!data.token) {
-        toast.error(t('error-credential-wrong'));
+        toast.error(`${t('error-credential-wrong')}`);
       }
     },
     onError: (error) => {
@@ -287,18 +336,41 @@ export function useRegister() {
 
   return { mutate, isLoading, formError, setFormError };
 }
+export function useResendVerificationEmail() {
+  const { t } = useTranslation('common');
+  const { mutate, isLoading } = useMutation(
+    client.users.resendVerificationEmail,
+    {
+      onSuccess: (data) => {
+        if (data?.success) {
+          toast.success(t('PICKBAZAR_MESSAGE.EMAIL_SENT_SUCCESSFUL'));
+        }
+      },
+      onError: (error) => {
+        const {
+          response: { data },
+        }: any = error ?? {};
 
+        toast.error(data?.message);
+      },
+    }
+  );
+
+  return { mutate, isLoading };
+}
 export function useLogout() {
   const queryClient = useQueryClient();
-  const { setToken } = useToken();
+  const { removeToken } = useToken();
   const [_, setAuthorized] = useAtom(authorizationAtom);
   const [_r, resetCheckout] = useAtom(clearCheckoutAtom);
 
-  const { mutate: signOut } = useMutation(client.users.logout, {
+  const { mutate: signOut, isLoading } = useMutation(client.users.logout, {
     onSuccess: (data) => {
       if (data) {
-        setToken('');
+        removeToken();
+        Cookies.remove(AUTH_CRED);
         setAuthorized(false);
+        //@ts-ignore
         resetCheckout();
         queryClient.refetchQueries(API_ENDPOINTS.USERS_ME);
       }
@@ -313,6 +385,7 @@ export function useLogout() {
   }
   return {
     mutate: handleLogout,
+    isLoading,
   };
 }
 
@@ -329,7 +402,7 @@ export function useChangePassword() {
         });
         return;
       }
-      toast.success(t('password-successful'));
+      toast.success(`${t('password-successful')}`);
     },
     onError: (error) => {
       const {

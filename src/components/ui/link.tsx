@@ -6,6 +6,7 @@ export interface LinkProps extends NextLinkProps {
   title?: string;
   target?: string;
   variant?: 'button';
+  children?: React.ReactNode;
 }
 
 const Link: React.FC<LinkProps> = ({
@@ -17,19 +18,19 @@ const Link: React.FC<LinkProps> = ({
   ...props
 }) => {
   return (
-    <NextLink {...props}>
-      <a
-        className={classNames(
-          {
-            "inline-flex items-center justify-center flex-shrink-0 font-semibold leading-none rounded outline-none px-3 py-0 h-9 text-sm bg-accent text-light border border-transparent hover:bg-accent-hover transition duration-300 ease-in-out focus:outline-none focus:shadow focus:ring-1 focus:ring-accent-700'":
-              variant === 'button',
-          },
-          className
-        )}
-        title={title}
-      >
-        {children}
-      </a>
+    <NextLink
+      {...props}
+      className={classNames(
+        {
+          "focus:ring-accent-700' inline-flex h-9 flex-shrink-0 items-center justify-center rounded border border-transparent bg-accent px-3 py-0 text-sm font-semibold leading-none text-light outline-none transition duration-300 ease-in-out hover:bg-accent-hover focus:shadow focus:outline-none focus:ring-1":
+            variant === 'button',
+        },
+        className
+      )}
+      target={target}
+      title={title}
+    >
+      {children}
     </NextLink>
   );
 };

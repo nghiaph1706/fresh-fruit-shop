@@ -7,6 +7,7 @@ import { Routes } from '@/config/routes';
 import isEmpty from 'lodash/isEmpty';
 import { getIcon } from '@/lib/get-icon';
 import * as socialIcons from '@/components/icons/social';
+import { useRouter } from 'next/router';
 
 interface ManufacturerProps {
   item: any;
@@ -15,15 +16,16 @@ interface ManufacturerProps {
 
 const ManufacturerCard: React.FC<ManufacturerProps> = ({ item, className }) => {
   const { t } = useTranslation();
+  const router = useRouter();
 
   return (
-    <Link
-      href={Routes.manufacturer(item?.slug)}
+    <div
       className={cn(
         'relative flex cursor-pointer items-center rounded border border-gray-200 bg-white p-5 shadow-md',
         className
       )}
       title={item?.name}
+      onClick={() => router.push(Routes.manufacturer(item?.slug))}
     >
       <span
         className={cn(
@@ -33,12 +35,13 @@ const ManufacturerCard: React.FC<ManufacturerProps> = ({ item, className }) => {
         <Image
           src={item?.image?.original! ?? avatarPlaceholder}
           alt={item?.name!}
-          layout="fill"
-          objectFit="cover"
+          fill
+          sizes="(max-width: 768px) 100vw"
+          className="object-cover"
         />
       </span>
       <div className="flex flex-col overflow-hidden ltr:ml-4 rtl:mr-4">
-        <span className="mb-2 truncate text-lg font-semibold text-heading transition-colors hover:text-orange-500">
+        <span className="mb-2 truncate text-lg font-semibold text-heading transition-colors hover:text-accent">
           {item?.name}
         </span>
         {!isEmpty(item?.socials) ? (
@@ -76,7 +79,7 @@ const ManufacturerCard: React.FC<ManufacturerProps> = ({ item, className }) => {
           </div>
         )}
       </div>
-    </Link>
+    </div>
   );
 };
 

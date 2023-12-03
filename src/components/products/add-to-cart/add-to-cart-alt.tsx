@@ -38,7 +38,8 @@ export const AddToCartAlt = ({
   disabled,
 }: Props) => {
   const { t } = useTranslation('common');
-  const { addItemToCart, isInStock, isInCart, updateCartLanguage, language } = useCart();
+  const { addItemToCart, isInStock, isInCart, updateCartLanguage, language } =
+    useCart();
   const item = generateCartItem(data, variation);
   const [quantity, setQuantity] = useState<number>(1);
   const increment = (e: React.MouseEvent<HTMLButtonElement | MouseEvent>) => {
@@ -50,7 +51,7 @@ export const AddToCartAlt = ({
   ) => {
     e.stopPropagation();
     // Check language and update
-    if (item?.language !== language){
+    if (item?.language !== language) {
       updateCartLanguage(item?.language);
     }
     addItemToCart(item, quantity);
@@ -69,6 +70,8 @@ export const AddToCartAlt = ({
     });
   };
   const outOfStock = isInCart(item?.id) && !isInStock(item.id);
+
+  const isDraft = data.status === 'draft';
   return (
     <div className="flex items-center space-x-3 rtl:space-x-reverse">
       <Counter
@@ -82,7 +85,7 @@ export const AddToCartAlt = ({
       <Button
         className="h-14 w-full max-w-sm !shrink"
         onClick={handleAddClick}
-        disabled={disabled || outOfStock}
+        disabled={disabled || outOfStock || isDraft}
       >
         {t('text-add-to-cart')}
       </Button>

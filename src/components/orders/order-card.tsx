@@ -38,7 +38,7 @@ const OrderCard: React.FC<OrderCardProps> = ({ onClick, order, isActive }) => {
           // className="max-w-full truncate whitespace-nowrap rounded bg-blue-100 px-3 py-2 text-sm text-blue-500"
           className={`max-w-full truncate whitespace-nowrap rounded ${StatusColor(
             order?.order_status
-          )} px-3 py-2 text-sm text-white`}
+          )} px-3 py-2 text-sm`}
           title={t(order_status)}
         >
           {t(order_status)}

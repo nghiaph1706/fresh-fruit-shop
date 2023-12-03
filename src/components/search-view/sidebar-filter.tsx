@@ -45,7 +45,7 @@ function ClearFiltersButton() {
   }
   return (
     <button
-      className="text-sm font-semibold transition-colors text-body hover:text-red-500 focus:text-red-500 focus:outline-none lg:m-0"
+      className="text-sm font-semibold text-body transition-colors hover:text-red-500 focus:text-red-500 focus:outline-0 lg:m-0"
       onClick={clearFilters}
     >
       {t('text-clear-all')}
@@ -65,14 +65,14 @@ const SidebarFilter: React.FC<{
   return (
     <div
       className={classNames(
-        'flex bg-white w-full h-full lg:h-auto flex-col lg:border border-gray-200 rounded-xl',
+        'flex h-full w-full flex-col rounded-xl border-gray-200 bg-white lg:h-auto lg:border',
         className
       )}
     >
-      <div className="sticky top-0 z-10 flex items-center justify-between px-5 py-6 bg-white border-b border-gray-200 lg:static rounded-tl-xl rounded-tr-xl">
+      <div className="sticky top-0 z-10 flex items-center justify-between rounded-tl-xl rounded-tr-xl border-b border-gray-200 bg-white px-5 py-6 lg:static">
         <div className="flex items-center space-x-3 rtl:space-x-reverse lg:space-x-0">
           <button
-            className="text-body focus:outline-none lg:hidden"
+            className="text-body focus:outline-0 lg:hidden"
             onClick={() => closeSidebar({ display: false, view: '' })}
           >
             <ArrowNarrowLeft
@@ -84,7 +84,7 @@ const SidebarFilter: React.FC<{
             <span className="sr-only">{t('text-close')}</span>
           </button>
 
-          <h3 className="text-xl font-semibold lg:text-2xl text-heading">
+          <h3 className="text-xl font-semibold text-heading lg:text-2xl">
             {t('text-filter')}
           </h3>
         </div>
@@ -121,7 +121,7 @@ const SidebarFilter: React.FC<{
           </FieldWrapper>
         )}
       </div>
-      <div className="p-5 bg-white sticky bottom-0 z-10 border-t border-gray-200 mt-auto lg:hidden">
+      <div className="sticky bottom-0 z-10 mt-auto border-t border-gray-200 bg-white p-5 lg:hidden">
         <Button
           className="w-full"
           onClick={() => closeSidebar({ display: false, view: '' })}

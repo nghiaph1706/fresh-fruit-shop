@@ -8,6 +8,8 @@ import { useModalAction } from '@/components/ui/modal/modal.context';
 import Link from '@/components/ui/link';
 import { Routes } from '@/config/routes';
 import { getReview } from '@/lib/get-review';
+import { OrderStatus, Product } from '@/types';
+import classNames from 'classnames';
 
 //FIXME: need to fix this usePrice hooks issue within the table render we may check with nested property
 const OrderItemList = (_: any, record: any) => {
@@ -28,7 +30,8 @@ const OrderItemList = (_: any, record: any) => {
           src={record.image?.thumbnail ?? productPlaceholder}
           alt={name}
           className="h-full w-full object-cover"
-          layout="fill"
+          fill
+          sizes="(max-width: 768px) 100vw"
         />
       </div>
 
@@ -58,9 +61,13 @@ const OrderItemList = (_: any, record: any) => {
 export const OrderItems = ({
   products,
   orderId,
+  orderStatus,
+  refund,
 }: {
-  products: any;
+  products: Product;
   orderId: any;
+  orderStatus: string;
+  refund: boolean;
 }) => {
   const { t } = useTranslation('common');
   const { alignLeft, alignRight } = useIsRTL();
@@ -94,9 +101,10 @@ export const OrderItems = ({
       width: 100,
       render: function RenderPrice(pivot: any) {
         const { price } = usePrice({
-          amount: pivot.subtotal,
+          amount: pivot?.subtotal,
         });
-        return <p>{price}</p>;
+
+        return <div>{price}</div>;
       },
     },
     {
@@ -105,6 +113,10 @@ export const OrderItems = ({
       align: alignRight,
       width: 140,
       render: function RenderReview(_: any, record: any) {
+        if (refund) {
+          return;
+        }
+
         function openReviewModal() {
           openModal('REVIEW_RATING', {
             product_id: record.id,
@@ -118,17 +130,20 @@ export const OrderItems = ({
             }),
           });
         }
-
-        return (
-          <button
-            onClick={openReviewModal}
-            className="cursor-pointer text-sm font-semibold text-body transition-colors hover:text-accent"
-          >
-            {getReview(record)
-              ? t('text-update-review')
-              : t('text-write-review')}
-          </button>
-        );
+        if (orderStatus === OrderStatus?.COMPLETED || refund) {
+          return (
+            <button
+              onClick={openReviewModal}
+              className={classNames(
+                'cursor-pointer text-sm font-semibold text-body transition-colors hover:text-accent'
+              )}
+            >
+              {getReview(record)
+                ? t('text-update-review')
+                : t('text-write-review')}
+            </button>
+          );
+        }
       },
     },
   ];
@@ -137,7 +152,8 @@ export const OrderItems = ({
     <Table
       //@ts-ignore
       columns={orderTableColumns}
-      data={products}
+      //@ts-ignore
+      data={products as Product}
       rowKey={(record: any) =>
         record.pivot?.variation_option_id
           ? record.pivot.variation_option_id
