@@ -224,6 +224,7 @@ function RenderFormSteps() {
       step,
     });
   }
+  const { t } = useTranslation('common');
   return (
     <div>
       {state.step === 'Email' && (
@@ -236,7 +237,7 @@ function RenderFormSteps() {
       )}
       {state.step === 'Token' && (
         <>
-          <Alert className="mb-4" message={message} />
+          <Alert className="mb-4" message={t(`common:${message}`)} />
           <TokenForm
             token={state.token}
             onSubmit={tokenFormHandle}

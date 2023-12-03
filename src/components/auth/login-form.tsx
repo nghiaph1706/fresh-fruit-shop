@@ -103,14 +103,14 @@ function LoginForm() {
           {t('text-login-google')}
         </Button>
 
-        <Button
+        {/* <Button
           className="h-11 w-full !bg-gray-500 !text-light hover:!bg-gray-600 sm:h-12"
           disabled={isLoading}
           onClick={() => openModal('OTP_LOGIN')}
         >
           <MobileIcon className="h-5 text-light ltr:mr-2 rtl:ml-2" />
           {t('text-login-mobile')}
-        </Button>
+        </Button> */}
 
         {isCheckout && guestCheckout && (
           <Button
