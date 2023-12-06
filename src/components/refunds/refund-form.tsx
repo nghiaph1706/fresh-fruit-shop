@@ -110,9 +110,9 @@ const CreateRefund = () => {
               <Label htmlFor="images">{t('text-product-image')}</Label>
               <FileInput control={control} name="images" multiple={true} />
             </div>
-            <div className="mb-8">
+            {/* <div className="mb-8">
               <p className='text-body'>Requesting a Refund? <Link href='/customer-refund-policies' className='text-accent hover:underline' target='_blank'>Please Read Our Policies First</Link></p>
-            </div>
+            </div> */}
             <div className="mt-8">
               <Button
                 className="h-11 w-full sm:h-12"
