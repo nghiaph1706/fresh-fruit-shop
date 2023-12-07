@@ -29,7 +29,8 @@ export default function HomeLayout({
         <Header layout={layout} />
       )}
       <div className="min-h-screen">{children}</div>
-      {['compact'].includes(layout) && <Footer />}
+      {/* {['compact'].includes(layout) && <Footer />} */}
+      <Footer />
       <MobileNavigation>
         <motion.button
           whileTap={{ scale: 0.88 }}
