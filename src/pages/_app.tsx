@@ -16,6 +16,7 @@ import QueryProvider from '@/framework/client/query-provider';
 import { getDirection } from '@/lib/constants';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
+import FloatingActionButtons from '@/components/ui/floating-action-button';
 const ToastContainer = dynamic(
   () => import('react-toastify').then((module) => module.ToastContainer),
   { ssr: false }
@@ -60,6 +61,7 @@ function CustomApp({
                     <ManagedDrawer />
                     <ToastContainer autoClose={2000} theme="colored" />
                     <SocialLogin />
+                    <FloatingActionButtons />
                   </>
                 </CartProvider>
               </ModalProvider>

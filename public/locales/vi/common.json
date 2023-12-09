@@ -1,10 +1,13 @@
 {
+    "text-faq-title": "FAQs",
+    "text-blog-title": "Bài viết",
     "404-heading": "Lỗi 404",
     "404-sub-heading": "Rất tiếc! Trang bạn tìm không tồn tại",
     "404-back-home": "Quay về trang chủ",
     "nav-menu-track-order": "Theo dõi đơn hàng",
     "nav-menu-offer": "Ưu đãi",
     "nav-menu-faq": "Câu hỏi thường gặp",
+    "nav-menu-blog": "Bài viết",
     "nav-menu-contact": "Liên hệ",
     "user-avatar": "ảnh đại diện",
     "auth-menu-profile": "Tài khoản",

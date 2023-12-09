@@ -8,7 +8,7 @@ const StaticMenu = () => {
   const { headerLinks } = siteSettings;
   return (
     <>
-      {headerLinks?.slice(0, 4)?.map(({ href, label, icon }) => (
+      {headerLinks?.slice(0, 5)?.map(({ href, label, icon }) => (
         <li key={`${href}${label}`}>
           <Link
             href={href}

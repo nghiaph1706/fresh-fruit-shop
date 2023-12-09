@@ -106,6 +106,7 @@ export const siteSettings = {
     { href: Routes.coupons, icon: null, label: 'nav-menu-offer' },
     { href: Routes.contactUs, label: 'nav-menu-contact' },
     { href: Routes.help, label: 'nav-menu-faq' },
+    { href: Routes.blog, label: 'nav-menu-blog' },
     { href: Routes.customerRefundPolicies, label: 'nav-menu-refund-policy' },
     { href: Routes.terms, label: 'nav-menu-terms' },
     { href: Routes.flashSale, label: 'nav-menu-flash-sale' },
@@ -132,14 +133,14 @@ export const siteSettings = {
             name: 'Shops',
             href: Routes.shops,
           },
-          {
-            name: 'Authors',
-            href: Routes.authors,
-          },
-          {
-            name: 'Flash Deals',
-            href: Routes?.flashSale,
-          },
+          // {
+          //   name: 'Authors',
+          //   href: Routes.authors,
+          // },
+          // {
+          //   name: 'Flash Deals',
+          //   href: Routes?.flashSale,
+          // },
           {
             name: 'Coupon',
             href: Routes.coupons,
@@ -150,26 +151,26 @@ export const siteSettings = {
         title: 'text-customer-service',
         links: [
           {
+            name: 'Blog',
+            href: Routes?.blog,
+          },
+          {
             name: 'text-faq-help',
             href: Routes.help,
           },
-          {
-            name: 'Vendor Refund Policies',
-            href: Routes.vendorRefundPolicies,
-          },
-          {
-            name: 'Customer Refund Policies',
-            href: Routes.customerRefundPolicies,
-          },
+          // {
+          //   name: 'Vendor Refund Policies',
+          //   href: Routes.vendorRefundPolicies,
+          // },
+          // {
+          //   name: 'Customer Refund Policies',
+          //   href: Routes.customerRefundPolicies,
+          // },
         ],
       },
       {
         title: 'text-our-information',
         links: [
-          {
-            name: 'Manufacturers',
-            href: Routes?.manufacturers,
-          },
           {
             name: 'Privacy policies',
             href: Routes.privacy,
