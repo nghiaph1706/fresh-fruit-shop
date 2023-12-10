@@ -1,5 +1,5 @@
 import PageBanner from '@/components/banners/page-banner';
-import FlashSaleCard from '@/components/flash-sale/flash-sale';
+// import FlashSaleCard from '@/components/flash-sale/flash-sale';
 import { getLayoutWithFooter } from '@/components/layouts/layout-with-footer';
 import Button from '@/components/ui/button';
 import ErrorMessage from '@/components/ui/error-message';
@@ -39,7 +39,7 @@ const FlashDealsPage: NextPageWithLayout = () => {
         <div className="px-4 py-10 pt-20">
           {!isEmpty(flashSales) ? (
             <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-              <FlashSaleCard flashSales={flashSales} />
+              {/* <FlashSaleCard flashSales={flashSales} /> */}
             </div>
           ) : (
             <NotFound text="text-no-flash-deal" className="h-96" />

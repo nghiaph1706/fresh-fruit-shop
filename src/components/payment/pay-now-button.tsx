@@ -7,7 +7,7 @@ import { Order } from '@/types';
 
 interface Props {
   trackingNumber?: string;
-  order: Order;
+  order?: Order;
   buttonSize?: 'big' | 'medium' | 'small';
   isFetching?: boolean;
 }
